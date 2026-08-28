@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 
+import Footer from './components/Footer'
 import Home from './pages/Home'
 import PackageHealthChecker from './pages/PackageHealthChecker'
 import PantryToPlate from './pages/PantryToPlate'
@@ -24,9 +25,9 @@ function App() {
   }, [darkMode])
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950 transition-colors">
-      <div className="max-w-4xl mx-auto px-6 py-10">
-        <header className="flex items-center justify-between mb-8">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-gray-950 transition-colors">
+      <div className="max-w-4xl mx-auto px-6 py-12 flex-1 w-full">
+        <header className="flex items-center justify-between mb-12">
           <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100">
             Shelby Kelley
           </h1>
@@ -48,6 +49,8 @@ function App() {
           <Route path="/pantry-to-plate" element={<PantryToPlate />} />
         </Routes>
       </div>
+
+      <Footer />
     </div>
   )
 }
