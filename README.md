@@ -1,16 +1,54 @@
-# React + Vite
+# Shelby Kelley — Portfolio Site
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Personal portfolio site showcasing backend-focused projects, built as a React app and deployed on AWS.
 
-Currently, two official plugins are available:
+**Live site:** [shelbyannkelley.com](https://shelbyannkelley.com)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tech stack
 
-## React Compiler
+- **React** (Vite) — component structure, client-side routing via React Router
+- **Tailwind CSS v4** — utility-first styling, manual dark mode (toggle + `localStorage` persistence, with an inline script that sets the theme before the page renders so it doesn't briefly flash the wrong color scheme)
+- **ESLint** — general JS rules, React-specific rules (`@eslint-react/eslint-plugin`), accessibility rules (`eslint-plugin-jsx-a11y-x`), and enforced/auto-sorted import ordering (`eslint-plugin-import-x`)
+- **Prettier** — code formatting, integrated with ESLint via `eslint-config-prettier`
+- **AWS S3** — static file hosting
+- **AWS CloudFront** — CDN + HTTPS, with a custom 404 → `/index.html` (200) error response so client-side routes resolve correctly on direct load
+- **AWS Certificate Manager** — free TLS certificate for the custom domain
+- **name.com** — domain registration and DNS
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Local development
 
-## Expanding the ESLint configuration
+```bash
+npm install
+npm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Linting & formatting
+
+```bash
+npx eslint .               # check for lint issues
+npx eslint . --fix         # auto-fix what's fixable (mainly import order)
+npx prettier --check .     # check formatting
+npx prettier --write .     # auto-fix formatting
+```
+
+## Environment setup
+
+Deployment needs your CloudFront distribution ID, kept out of git via a `.env` file (already in `.gitignore`):
+
+```
+CLOUDFRONT_DISTRIBUTION_ID=your_distribution_id_here
+```
+
+## Deployment
+
+```bash
+./deploy.sh
+```
+
+This builds the app, syncs the `dist/` folder to S3, and invalidates the CloudFront cache so changes go live within a minute or two.
+
+## Featured projects
+
+- **Retro Rewind** — Reverse-engineering a game's API from the ground up: schema design, Docker, and a deliberate Python-to-Java port.
+- **Package Health Checker** — Search any package for known CVEs, end-of-life status, and maintenance activity.
+- **Pantry-to-Plate** — Recipe matching against a tracked pantry, with a bounded LLM fallback for leftover ingredients.
