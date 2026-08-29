@@ -29,11 +29,12 @@ function Home() {
     <>
       <Bio />
       <section className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-8">
-        {projects.map((project) => (
+        {projects.map((project, index) => (
           <Link
             key={project.slug}
             to={`/${project.slug}`}
-            className="h-full block"
+            className="h-full block animate-fade-in-up"
+            style={{ animationDelay: `${index * 100 + 150}ms` }}
           >
             <ProjectCard
               title={project.title}
