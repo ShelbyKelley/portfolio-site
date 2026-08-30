@@ -1,15 +1,18 @@
 # Shelby Kelley — Portfolio Site
 
-Personal portfolio site showcasing backend-focused projects, built as a React app and deployed on AWS.
+Personal portfolio site for full-stack projects with a backend focus, currently in progress.
+Built as a React app and deployed on AWS.
 
 **Live site:** [shelbyannkelley.com](https://shelbyannkelley.com)
 
 ## Tech stack
 
 - **React** (Vite) — component structure, client-side routing via React Router
-- **Tailwind CSS v4** — utility-first styling, manual dark mode (toggle + `localStorage` persistence, with an inline script that sets the theme before the page renders so it doesn't briefly flash the wrong color scheme)
+- **Tailwind CSS v4** — utility-first styling, theme-aware via CSS variables (fall palette in light mode, Halloween palette in dark mode), manual dark mode toggle persisted in `localStorage`
 - **ESLint** — general JS rules, React-specific rules (`@eslint-react/eslint-plugin`), accessibility rules (`eslint-plugin-jsx-a11y-x`), and enforced/auto-sorted import ordering (`eslint-plugin-import-x`)
 - **Prettier** — code formatting, integrated with ESLint via `eslint-config-prettier`
+- **Husky + lint-staged** — auto-lints and formats staged files before every commit
+- **commitlint** — enforces conventional commit messages
 - **AWS S3** — static file hosting
 - **AWS CloudFront** — CDN + HTTPS, with a custom 404 → `/index.html` (200) error response so client-side routes resolve correctly on direct load
 - **AWS Certificate Manager** — free TLS certificate for the custom domain
@@ -31,21 +34,21 @@ npx prettier --check .     # check formatting
 npx prettier --write .     # auto-fix formatting
 ```
 
-## Environment setup
-
-Deployment needs your CloudFront distribution ID, kept out of git via a `.env` file (already in `.gitignore`):
-
-```
-CLOUDFRONT_DISTRIBUTION_ID=your_distribution_id_here
-```
-
 ## Deployment
+
+**Primary: automatic via GitHub Actions.** Every push to `main` triggers `.github/workflows/deploy.yml`, which lints, builds, syncs to S3, and invalidates the CloudFront cache. Just push — no manual steps needed. A separate `.github/workflows/lint.yml` runs lint/format checks on pull requests.
+
+**Fallback: manual deploy.** If CI is unavailable, or you want to deploy a local change without pushing, run:
 
 ```bash
 ./deploy.sh
 ```
 
-This builds the app, syncs the `dist/` folder to S3, and invalidates the CloudFront cache so changes go live within a minute or two.
+This requires a local `.env` file (not committed — see below) with your CloudFront distribution ID, since the script runs outside of GitHub's environment and doesn't have access to the repo's GitHub Secrets.
+
+```
+CLOUDFRONT_DISTRIBUTION_ID=your_distribution_id_here
+```
 
 ## Featured projects
 
