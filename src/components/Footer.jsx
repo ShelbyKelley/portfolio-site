@@ -1,28 +1,32 @@
+import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useMemo } from 'react'
 
 function Footer() {
   const year = useMemo(() => new Date().getFullYear(), [])
 
   return (
-    <footer className="border-t border-gray-200 dark:border-gray-800 mt-4">
-      <div className="max-w-4xl mx-auto px-6 py-6 flex items-center justify-between text-sm text-gray-500 dark:text-gray-500">
+    <footer className="border-t border-subtle mt-4">
+      <div className="max-w-4xl mx-auto px-6 py-6 flex items-center justify-between text-sm text-body">
         <span>© {year} Shelby Kelley</span>
         <div className="flex gap-4">
           <a
             href="https://github.com/ShelbyKelley"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-gray-900 dark:hover:text-gray-300 transition-colors"
+            aria-label="GitHub"
+            className="hover:text-brand transition-colors"
           >
-            GitHub
+            <FontAwesomeIcon icon={faGithub} size="2x" />
           </a>
           <a
             href="https://www.linkedin.com/in/shelbyakelley/"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-gray-900 dark:hover:text-gray-300 transition-colors"
+            aria-label="LinkedIn"
+            className="hover:text-brand transition-colors"
           >
-            LinkedIn
+            <FontAwesomeIcon icon={faLinkedin} size="2x" />
           </a>
         </div>
       </div>

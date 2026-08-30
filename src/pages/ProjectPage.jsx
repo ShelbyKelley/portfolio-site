@@ -2,19 +2,17 @@ import { Link } from 'react-router-dom'
 
 function ProjectPage({ title, children }) {
   return (
-    <div>
+    <div className="animate-fade-in-up">
       <Link
         to="/"
-        className="inline-block mb-6 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
+        className="inline-block mb-6 text-sm text-body hover:text-brand transition-colors"
       >
         ← Back to all projects
       </Link>
-      <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+      <h1 className="text-3xl font-bold font-heading text-brand mb-4">
         {title}
       </h1>
-      <div className="text-gray-600 dark:text-gray-400 leading-relaxed space-y-4">
-        {children}
-      </div>
+      <div className="text-body leading-relaxed space-y-4">{children}</div>
     </div>
   )
 }

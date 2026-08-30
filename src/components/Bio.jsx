@@ -1,7 +1,7 @@
 function Bio() {
   return (
     <section className="max-w-2xl mb-12 animate-fade-in-up">
-      <p className="text-lg leading-relaxed text-gray-600 dark:text-gray-400">
+      <p className="text-lg leading-relaxed text-body">
         Hi, I'm Shelby — a software engineer currently focused on backend
         systems, database architecture, and open-source security. I specialize
         in identifying and remediating vulnerabilities in critical, often
