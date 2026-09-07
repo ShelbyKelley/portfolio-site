@@ -1,7 +1,6 @@
 # Shelby Kelley — Portfolio Site
 
 Personal portfolio site for full-stack projects with a backend focus, currently in progress.
-Built as a React app and deployed on AWS.
 
 **Live site:** [shelbyannkelley.com](https://shelbyannkelley.com)
 
@@ -18,12 +17,26 @@ Built as a React app and deployed on AWS.
 - **AWS Certificate Manager** — free TLS certificate for the custom domain
 - **name.com** — domain registration and DNS
 
+## Featured projects
+
+- **Package Health Checker** — Embedded tool backed by a live AWS Lambda API (behind API Gateway, with rate limiting). Search any package for known CVEs, severity, and advisory links. Source at [github.com/ShelbyKelley/package-health-checker](https://github.com/ShelbyKelley/package-health-checker). The search UI component (`src/components/PackageHealthCheckerTool.jsx`) is **synced automatically** from that repo via a GitHub Actions workflow that opens a PR here whenever it changes — don't hand-edit that file directly, since it'll be overwritten by the next sync.
+- **Retro Rewind** — Reverse-engineering a game's API from the ground up: schema design, Docker, and a deliberate Python-to-Java port.
+- **Pantry-to-Plate** — Recipe matching against a tracked pantry, with a bounded LLM fallback for leftover ingredients.
+
 ## Local development
 
 ```bash
 npm install
 npm run dev
 ```
+
+Requires a `.env.development` file (not committed) with:
+
+```
+VITE_PACKAGE_HEALTH_API_URL=http://localhost:8000
+```
+
+This points the embedded Package Health Checker tool at that project's local backend — see its own repo for running that.
 
 ## Linting & formatting
 
@@ -32,6 +45,14 @@ npx eslint .               # check for lint issues
 npx eslint . --fix         # auto-fix what's fixable (mainly import order)
 npx prettier --check .     # check formatting
 npx prettier --write .     # auto-fix formatting
+```
+
+## Environment setup
+
+Deployment needs your CloudFront distribution ID, kept out of git via a `.env` file (already in `.gitignore`):
+
+```
+CLOUDFRONT_DISTRIBUTION_ID=your_distribution_id_here
 ```
 
 ## Deployment
@@ -44,14 +65,4 @@ npx prettier --write .     # auto-fix formatting
 ./deploy.sh
 ```
 
-This requires a local `.env` file (not committed — see below) with your CloudFront distribution ID, since the script runs outside of GitHub's environment and doesn't have access to the repo's GitHub Secrets.
-
-```
-CLOUDFRONT_DISTRIBUTION_ID=your_distribution_id_here
-```
-
-## Featured projects
-
-- **Retro Rewind** — Reverse-engineering a game's API from the ground up: schema design, Docker, and a deliberate Python-to-Java port.
-- **Package Health Checker** — Search any package for known CVEs, end-of-life status, and maintenance activity.
-- **Pantry-to-Plate** — Recipe matching against a tracked pantry, with a bounded LLM fallback for leftover ingredients.
+This requires the local `.env` file mentioned above (for `CLOUDFRONT_DISTRIBUTION_ID`), since the script runs outside of GitHub's environment and doesn't have access to the repo's GitHub Secrets.
