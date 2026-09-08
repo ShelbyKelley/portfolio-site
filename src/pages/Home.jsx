@@ -5,22 +5,22 @@ import ProjectCard from '../components/ProjectCard'
 
 const projects = [
   {
-    slug: 'retro-rewind',
-    title: 'Retro Rewind',
+    slug: 'rice-calculator',
+    title: 'RICE Prioritization Calculator',
     description:
-      "Reverse-engineering a game's API from the ground up: schema design, Docker, and a deliberate Python-to-Java port to prove the architecture — not just the syntax — travels.",
+      'A working RICE scoring tool for ranking competing feature ideas by reach, impact, confidence, and effort.',
   },
   {
     slug: 'package-health-checker',
     title: 'Package Health Checker',
     description:
-      'Search any package and see its real health: known CVEs, end-of-life status, and maintenance activity — the same diagnostic work I do professionally, built as a tool anyone can use.',
+      'Search any npm package for known vulnerabilities, severity, and advisory links in one lookup.',
   },
   {
-    slug: 'pantry-to-plate',
-    title: 'Pantry-to-Plate',
+    slug: 'phc-case-study',
+    title: 'Case Study: Package Health Checker',
     description:
-      'Matches recipes against what\'s actually in your kitchen, down to "you\'re just missing two things" — with a bounded AI assist for using up the odds and ends.',
+      'A written breakdown of the scoping decisions and trade-offs behind Package Health Checker.',
   },
 ]
 
