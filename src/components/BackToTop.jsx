@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react'
 
 function BackToTop() {
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(() => window.scrollY > 300)
 
   useEffect(() => {
     function handleScroll() {
       setVisible(window.scrollY > 300)
     }
-    handleScroll()
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
@@ -28,7 +27,7 @@ function BackToTop() {
     <button
       onClick={scrollToTop}
       aria-label="Back to top"
-      className="fixed bottom-6 right-6 z-50 rounded-full border border-subtle bg-surface-alt px-4 py-3 text-body shadow-md hover:border-brand hover:text-brand transition-colors"
+      className="fixed bottom-24 right-6 z-50 rounded-full border border-subtle bg-surface-alt px-4 py-3 text-body shadow-md hover:border-brand hover:text-brand transition-colors"
     >
       ↑
     </button>

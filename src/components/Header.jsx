@@ -27,7 +27,7 @@ function Header({ darkMode, setDarkMode }) {
         </Link>
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className="rounded-full border border-subtle px-4 py-2 text-sm text-body hover:bg-brand hover:text-brand-contrast hover:border-brand transition-colors"
+          className="rounded-full border border-subtle bg-surface-alt px-4 py-2 text-sm text-body hover:bg-brand hover:text-brand-contrast hover:border-brand transition-colors"
         >
           {darkMode ? '☀️ Light' : '🌙 Dark'}
         </button>
