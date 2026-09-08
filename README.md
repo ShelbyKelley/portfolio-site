@@ -8,6 +8,7 @@ Personal portfolio site for full-stack projects with a backend focus, currently 
 
 - **React** (Vite) — component structure, client-side routing via React Router
 - **Tailwind CSS v4** — utility-first styling, theme-aware via CSS variables (fall palette in light mode, Halloween palette in dark mode), manual dark mode toggle persisted in `localStorage`
+- **Font Awesome** — footer social icons and site favicon
 - **ESLint** — general JS rules, React-specific rules (`@eslint-react/eslint-plugin`), accessibility rules (`eslint-plugin-jsx-a11y-x`), and enforced/auto-sorted import ordering (`eslint-plugin-import-x`)
 - **Prettier** — code formatting, integrated with ESLint via `eslint-config-prettier`
 - **Husky + lint-staged** — auto-lints and formats staged files before every commit
@@ -19,9 +20,9 @@ Personal portfolio site for full-stack projects with a backend focus, currently 
 
 ## Featured projects
 
-- **Package Health Checker** — Embedded tool backed by a live AWS Lambda API (behind API Gateway, with rate limiting). Search any package for known CVEs, severity, and advisory links. Source at [github.com/ShelbyKelley/package-health-checker](https://github.com/ShelbyKelley/package-health-checker). The search UI component (`src/components/PackageHealthCheckerTool.jsx`) is **synced automatically** from that repo via a GitHub Actions workflow that opens a PR here whenever it changes — don't hand-edit that file directly, since it'll be overwritten by the next sync.
-- **Retro Rewind** — Reverse-engineering a game's API from the ground up: schema design, Docker, and a deliberate Python-to-Java port.
-- **Pantry-to-Plate** — Recipe matching against a tracked pantry, with a bounded LLM fallback for leftover ingredients.
+- **Package Health Checker** — Live and functional. Search any package for known CVEs, severity, and advisory links. Backend runs on AWS Lambda behind API Gateway, with rate limiting. Source at [github.com/ShelbyKelley/package-health-checker](https://github.com/ShelbyKelley/package-health-checker). The search UI component (`src/components/PackageHealthCheckerTool.jsx`) is **synced automatically** from that repo via a GitHub Actions workflow that opens a PR here whenever it changes — don't hand-edit that file directly, since it'll be overwritten by the next sync.
+- **Retro Rewind** — In progress. Reverse-engineering a game's API from the ground up: schema design, Docker, and a deliberate Python-to-Java port.
+- **Pantry-to-Plate** — In progress. Recipe matching against a tracked pantry, with a bounded LLM fallback for leftover ingredients.
 
 ## Local development
 
@@ -49,11 +50,20 @@ npx prettier --write .     # auto-fix formatting
 
 ## Environment setup
 
-Deployment needs your CloudFront distribution ID, kept out of git via a `.env` file (already in `.gitignore`):
+**Local (manual deploy fallback):** a `.env` file (gitignored) with your CloudFront distribution ID:
 
 ```
 CLOUDFRONT_DISTRIBUTION_ID=your_distribution_id_here
 ```
+
+**GitHub Actions (automatic deploy):** the following must be set in the repo's Settings → Secrets and variables → Actions:
+
+| Name                          | Type     | Purpose                                                 |
+| ----------------------------- | -------- | ------------------------------------------------------- |
+| `AWS_ACCESS_KEY_ID`           | Secret   | Deploy IAM user's access key                            |
+| `AWS_SECRET_ACCESS_KEY`       | Secret   | Deploy IAM user's secret key                            |
+| `CLOUDFRONT_DISTRIBUTION_ID`  | Secret   | Cache invalidation after deploy                         |
+| `VITE_PACKAGE_HEALTH_API_URL` | Variable | Public Lambda API URL, built into the production bundle |
 
 ## Deployment
 
