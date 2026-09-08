@@ -1,19 +1,42 @@
 import { Link } from 'react-router-dom'
 
+const sections = [
+  { id: 'problem', label: 'Problem' },
+  { id: 'scope-decisions', label: 'Scope decisions' },
+  { id: 'risk-and-security', label: 'Risk and security posture' },
+  { id: 'next-steps', label: "What I'd prioritize next" },
+]
+
 function PHCCaseStudy() {
   return (
     <div className="animate-fade-in-up">
       <Link
-        to="/"
+        to="/projects"
         className="inline-block mb-6 text-sm text-body hover:text-brand transition-colors"
       >
-        ← Back to all projects
+        ← Back to projects
       </Link>
       <h1 className="font-heading text-3xl font-bold text-brand mb-4">
         Case Study: Package Health Checker
       </h1>
+
+      <nav aria-label="Page sections" className="mb-8">
+        <ul className="flex flex-wrap gap-3 text-sm">
+          {sections.map((section) => (
+            <li key={section.id}>
+              <a
+                href={`#${section.id}`}
+                className="rounded-full border border-subtle bg-surface-alt px-3 py-1 text-body hover:border-brand hover:text-brand transition-colors"
+              >
+                {section.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
       <div className="text-body leading-relaxed space-y-6">
-        <section>
+        <section id="problem">
           <h2 className="font-heading text-xl font-semibold text-heading mb-2">
             Problem
           </h2>
@@ -27,7 +50,7 @@ function PHCCaseStudy() {
           </p>
         </section>
 
-        <section>
+        <section id="scope-decisions">
           <h2 className="font-heading text-xl font-semibold text-heading mb-2">
             Scope decisions
           </h2>
@@ -44,7 +67,7 @@ function PHCCaseStudy() {
           </p>
         </section>
 
-        <section>
+        <section id="risk-and-security">
           <h2 className="font-heading text-xl font-semibold text-heading mb-2">
             Risk and security posture
           </h2>
@@ -57,7 +80,7 @@ function PHCCaseStudy() {
           </p>
         </section>
 
-        <section>
+        <section id="next-steps">
           <h2 className="font-heading text-xl font-semibold text-heading mb-2">
             What I'd prioritize next
           </h2>

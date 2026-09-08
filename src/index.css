@@ -2,16 +2,16 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  /* Light mode — fall: parchment, deep brown, pumpkin + amber */
-  --surface: #faf3e7;
-  --surface-alt: #fff8ee;
-  --surface-hover: #f4e4b8;
-  --body: #5c4632;
-  --heading: #2e1f14;
-  --subtle: #e3d3b8;
-  --brand: #c2570c;
-  --brand-secondary: #b8860b;
-  --brand-contrast: #fff8ee;
+  /* Light mode — fall: harvest gold, deep burgundy accent */
+  --surface: #f0e3c3;
+  --surface-alt: #f7eeda;
+  --surface-hover: #e3d2a8;
+  --body: #4a3520;
+  --heading: #2a1c10;
+  --subtle: #d4bf8f;
+  --brand: #8b2f2f;
+  --brand-secondary: #a67c1f;
+  --brand-contrast: #f7eeda;
 
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading-font: 'Space Grotesk', system-ui, sans-serif;

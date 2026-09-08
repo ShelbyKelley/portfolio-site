@@ -4,7 +4,7 @@ function ProjectPage({ title, children }) {
   return (
     <div className="animate-fade-in-up">
       <Link
-        to="/"
+        to="/projects"
         className="inline-block mb-6 text-sm text-body hover:text-brand transition-colors"
       >
         ← Back to all projects

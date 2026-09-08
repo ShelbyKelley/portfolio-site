@@ -1,0 +1,38 @@
+import { useState, useEffect } from 'react'
+
+function BackToTop() {
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    function handleScroll() {
+      setVisible(window.scrollY > 300)
+    }
+    handleScroll()
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  function scrollToTop() {
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches
+    window.scrollTo({
+      top: 0,
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+    })
+  }
+
+  if (!visible) return null
+
+  return (
+    <button
+      onClick={scrollToTop}
+      aria-label="Back to top"
+      className="fixed bottom-6 right-6 z-50 rounded-full border border-subtle bg-surface-alt px-4 py-3 text-body shadow-md hover:border-brand hover:text-brand transition-colors"
+    >
+      ↑
+    </button>
+  )
+}
+
+export default BackToTop

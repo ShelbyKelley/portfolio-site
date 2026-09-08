@@ -2,6 +2,12 @@ import RiceCalculatorTool from '../components/RiceCalculatorTool'
 
 import ProjectPage from './ProjectPage'
 
+const sections = [
+  { id: 'formula', label: 'The formula' },
+  { id: 'field-definitions', label: 'What each field means' },
+  { id: 'how-to-use', label: 'How to use it' },
+]
+
 function RiceCalculator() {
   return (
     <ProjectPage title="RICE Prioritization Calculator">
@@ -11,7 +17,22 @@ function RiceCalculator() {
         ranks them automatically.
       </p>
 
-      <section>
+      <nav aria-label="Page sections" className="not-prose">
+        <ul className="flex flex-wrap gap-3 text-sm">
+          {sections.map((section) => (
+            <li key={section.id}>
+              <a
+                href={`#${section.id}`}
+                className="rounded-full border border-subtle bg-surface-alt px-3 py-1 text-body hover:border-brand hover:text-brand transition-colors"
+              >
+                {section.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <section id="formula">
         <h2 className="font-heading text-xl font-semibold text-heading mb-2">
           The formula
         </h2>
@@ -25,7 +46,7 @@ function RiceCalculator() {
         </p>
       </section>
 
-      <section>
+      <section id="field-definitions">
         <h2 className="font-heading text-xl font-semibold text-heading mb-2">
           What each field means
         </h2>
@@ -55,7 +76,7 @@ function RiceCalculator() {
         </ul>
       </section>
 
-      <section>
+      <section id="how-to-use">
         <h2 className="font-heading text-xl font-semibold text-heading mb-2">
           How to use it
         </h2>

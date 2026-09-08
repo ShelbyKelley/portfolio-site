@@ -1,47 +1,63 @@
 import { Link } from 'react-router-dom'
 
 import Bio from '../components/Bio'
-import ProjectCard from '../components/ProjectCard'
 
-const projects = [
-  {
-    slug: 'rice-calculator',
-    title: 'RICE Prioritization Calculator',
-    description:
-      'A working RICE scoring tool for ranking competing feature ideas by reach, impact, confidence, and effort.',
-  },
-  {
-    slug: 'package-health-checker',
-    title: 'Package Health Checker',
-    description:
-      'Search any npm package for known vulnerabilities, severity, and advisory links in one lookup.',
-  },
-  {
-    slug: 'phc-case-study',
-    title: 'Case Study: Package Health Checker',
-    description:
-      'A written breakdown of the scoping decisions and trade-offs behind Package Health Checker.',
-  },
+const facts = [
+  '8 years in software development',
+  '5 years leading engineering teams',
+  'CSM certified',
+  'B.S. Computer Science, B.A. Anthropology',
 ]
 
 function Home() {
   return (
     <>
       <Bio />
-      <section className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-8">
-        {projects.map((project, index) => (
-          <Link
-            key={project.slug}
-            to={`/${project.slug}`}
-            className="h-full block animate-fade-in-up"
-            style={{ animationDelay: `${index * 100 + 150}ms` }}
+
+      <ul className="flex flex-wrap gap-2 mb-6">
+        {facts.map((fact) => (
+          <li
+            key={fact}
+            className="rounded-full border border-subtle bg-surface-alt px-3 py-1 text-sm text-body"
           >
-            <ProjectCard
-              title={project.title}
-              description={project.description}
-            />
-          </Link>
+            {fact}
+          </li>
         ))}
+      </ul>
+
+      <Link
+        to="/projects"
+        className="inline-block rounded-md bg-brand px-5 py-2 text-brand-contrast font-medium hover:opacity-90 transition-opacity mb-16"
+      >
+        View my projects →
+      </Link>
+
+      <section className="pt-10 border-t border-subtle">
+        <h2 className="font-heading text-2xl font-semibold text-heading mb-4">
+          Leading under a hard deadline
+        </h2>
+        <div className="text-body leading-relaxed space-y-4 max-w-2xl">
+          <p>
+            At HeroDevs, I led a three-person team through a three-month
+            deadline to finish a partial system migration for a client in
+            Denmark.
+          </p>
+          <p>
+            I set up a kanban board to divide the work and ran daily standups to
+            keep the team on track. Weekly client demos kept us aligned and let
+            us coordinate shared components with a parallel team working the
+            same codebase.
+          </p>
+          <p>
+            I served as both team lead and a working developer, splitting work
+            across the team and running informal lunch-and-learns to close skill
+            gaps as they came up.
+          </p>
+          <p>
+            We hit the deadline, and the client stayed on for further work with
+            HeroDevs.
+          </p>
+        </div>
       </section>
     </>
   )
