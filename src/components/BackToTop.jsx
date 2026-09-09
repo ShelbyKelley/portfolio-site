@@ -27,7 +27,7 @@ function BackToTop() {
     <button
       onClick={scrollToTop}
       aria-label="Back to top"
-      className="fixed bottom-24 right-6 z-50 rounded-full border border-subtle bg-surface-alt px-4 py-3 text-body shadow-md hover:border-brand hover:text-brand transition-colors"
+      className="fixed bottom-24 right-6 z-50 rounded-full border border-subtle bg-surface px-4 py-3 font-mono text-body no-underline hover:border-brand hover:text-brand transition-colors duration-200"
     >
       ↑
     </button>

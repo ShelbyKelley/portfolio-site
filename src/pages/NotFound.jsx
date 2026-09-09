@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom'
 
 function NotFound() {
   return (
-    <div className="text-center py-16 animate-fade-in-up">
-      <h1 className="text-3xl font-bold font-heading text-brand mb-4">
+    <div className="text-center py-16">
+      <h1 className="font-heading font-light text-4xl text-heading mb-4">
         🦇 Page not found
       </h1>
       <p className="text-body mb-6">
@@ -11,9 +11,9 @@ function NotFound() {
       </p>
       <Link
         to="/"
-        className="inline-block rounded-full border border-subtle px-4 py-2 text-sm text-body hover:bg-brand hover:text-brand-contrast hover:border-brand transition-colors"
+        className="inline-block rounded-full border border-subtle px-4 py-2 font-mono text-[13px] no-underline text-body hover:border-brand hover:text-brand transition-colors duration-200"
       >
-        ← Back to home
+        ← back to home
       </Link>
     </div>
   )

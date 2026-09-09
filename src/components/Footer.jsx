@@ -7,7 +7,7 @@ function Footer() {
 
   return (
     <footer className="border-t border-subtle mt-4">
-      <div className="max-w-4xl mx-auto px-6 py-6 flex items-center justify-between text-sm text-body">
+      <div className="max-w-4xl mx-auto px-6 py-6 flex items-center justify-between font-mono text-[13px] text-body">
         <span>© {year} Shelby Kelley</span>
         <div className="flex gap-4">
           <a
@@ -15,18 +15,18 @@ function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
-            className="hover:text-brand transition-colors"
+            className="no-underline text-body hover:text-brand transition-colors"
           >
-            <FontAwesomeIcon icon={faGithub} size="2x" />
+            <FontAwesomeIcon icon={faGithub} size="lg" />
           </a>
           <a
             href="https://www.linkedin.com/in/shelbyakelley/"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="LinkedIn"
-            className="hover:text-brand transition-colors"
+            className="no-underline text-body hover:text-brand transition-colors"
           >
-            <FontAwesomeIcon icon={faLinkedin} size="2x" />
+            <FontAwesomeIcon icon={faLinkedin} size="lg" />
           </a>
         </div>
       </div>

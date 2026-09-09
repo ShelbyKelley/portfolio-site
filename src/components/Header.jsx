@@ -2,34 +2,38 @@ import { Link } from 'react-router-dom'
 
 function Header({ darkMode, setDarkMode }) {
   return (
-    <header className="flex items-center justify-between mb-12 flex-wrap gap-4">
+    <header className="flex items-baseline justify-between mb-16 flex-wrap gap-4 border-b border-subtle pb-6">
       <Link
         to="/"
-        className="font-heading text-4xl font-bold text-heading border-b-2 border-brand pb-1 hover:opacity-80 transition-opacity"
+        className="flex items-baseline gap-3 font-mono text-[13px] uppercase tracking-[0.16em] no-underline hover:opacity-80 transition-opacity"
       >
-        Shelby Kelley
+        <span className="text-body">Shelby Kelley</span>
+        <span className="text-brand-secondary normal-case">/ technical pm</span>
       </Link>
-      <nav className="flex items-center gap-6">
-        <Link to="/" className="text-body hover:text-brand transition-colors">
-          Home
+      <nav className="flex items-center gap-6 font-mono text-[13px]">
+        <Link
+          to="/"
+          className="text-body no-underline hover:text-brand transition-colors"
+        >
+          home
         </Link>
         <Link
           to="/projects"
-          className="text-body hover:text-brand transition-colors"
+          className="text-body no-underline hover:text-brand transition-colors"
         >
-          Projects
+          projects
         </Link>
         <Link
           to="/resume"
-          className="text-body hover:text-brand transition-colors"
+          className="text-body no-underline hover:text-brand transition-colors"
         >
-          Resume
+          resume
         </Link>
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className="rounded-full border border-subtle bg-surface-alt px-4 py-2 text-sm text-body hover:bg-brand hover:text-brand-contrast hover:border-brand transition-colors"
+          className="rounded-full border border-subtle px-3.5 py-1.5 min-h-8 tracking-[0.08em] text-body hover:border-brand hover:text-brand transition-colors duration-200"
         >
-          {darkMode ? '☀️ Light' : '🌙 Dark'}
+          {darkMode ? 'light mode' : 'dark mode'}
         </button>
       </nav>
     </header>

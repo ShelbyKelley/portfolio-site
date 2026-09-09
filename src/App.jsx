@@ -30,7 +30,7 @@ function App() {
   }, [darkMode])
 
   return (
-    <div className="min-h-screen flex flex-col bg-surface transition-colors">
+    <div className="min-h-screen flex flex-col bg-surface transition-[background-color,color] duration-420 ease-in-out">
       <div className="max-w-5xl mx-auto px-6 py-12 flex-1 w-full">
         <Header darkMode={darkMode} setDarkMode={setDarkMode} />
 

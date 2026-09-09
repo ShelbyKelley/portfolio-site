@@ -1,3 +1,5 @@
+import Reveal from '../components/Reveal'
+
 const competencies = [
   'Technical Program Management',
   'Cross-Functional Team Leadership',
@@ -72,128 +74,151 @@ const education = [
 
 function Resume() {
   return (
-    <div className="animate-fade-in-up max-w-3xl">
-      <div className="flex items-center justify-between flex-wrap gap-4 mb-2">
-        <div>
-          <h1 className="font-heading text-3xl font-bold text-brand mb-1">
-            Shelby Kelley
-          </h1>
-          <p className="font-semibold text-heading">
-            Technical Product / Program Manager
-          </p>
-          <p className="text-sm text-body mt-1">
-            <a
-              href="mailto:shelbya.kelley@gmail.com"
-              className="hover:text-brand transition-colors"
-            >
-              shelbya.kelley@gmail.com
-            </a>
-            {' · '}
-            <a
-              href="https://www.linkedin.com/in/shelbyakelley/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-brand transition-colors"
-            >
-              LinkedIn
-            </a>
-            {' · '}
-            <a
-              href="https://github.com/ShelbyKelley"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-brand transition-colors"
-            >
-              GitHub
-            </a>
-          </p>
-        </div>
+    <div>
+      <Reveal index={0} className="mb-10">
+        <h1 className="font-heading font-light text-4xl text-heading mb-1">
+          Shelby Kelley
+        </h1>
+        <p className="font-mono text-[13px] uppercase tracking-widest text-brand-secondary mb-2">
+          Technical Product / Program Manager
+        </p>
+        <p className="font-mono text-[13px] text-body">
+          <a
+            href="mailto:shelbya.kelley@gmail.com"
+            className="text-body no-underline hover:text-brand transition-colors"
+          >
+            shelbya.kelley@gmail.com
+          </a>
+          {' · '}
+          <a
+            href="https://www.linkedin.com/in/shelbyakelley/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-body no-underline hover:text-brand transition-colors"
+          >
+            LinkedIn
+          </a>
+          {' · '}
+          <a
+            href="https://github.com/ShelbyKelley"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-body no-underline hover:text-brand transition-colors"
+          >
+            GitHub
+          </a>
+        </p>
+      </Reveal>
+
+      <div className="flex items-baseline justify-between pb-3.5 mb-8 border-b border-subtle">
+        <span className="font-mono text-[13px] uppercase tracking-[0.16em] text-body">
+          Curriculum vitae
+        </span>
         <a
           href="/resume.pdf"
           download
-          className="inline-block rounded-md bg-brand px-5 py-2 text-brand-contrast font-medium hover:opacity-90 transition-opacity"
+          className="font-mono text-[13px] text-body no-underline border-b border-subtle pb-0.5 hover:text-brand hover:border-brand transition-colors"
         >
-          Download PDF
+          download pdf
         </a>
       </div>
 
-      <section className="mt-8 mb-8">
-        <h2 className="font-heading text-xl font-semibold text-brand-secondary mb-3 pb-2 border-b border-subtle">
-          Summary
-        </h2>
-        <p className="text-body leading-relaxed">
-          Technical Product/Program Manager with{' '}
-          <strong className="text-heading">8 years</strong> in software
-          development, including{' '}
-          <strong className="text-heading">
-            5 years leading engineering teams
-          </strong>
-          . Combines hands-on technical fluency with program management
-          practice, including Agile/Scrum facilitation, stakeholder
-          communication, cross-team dependency coordination, and risk
-          management, to turn ambiguous requirements into shipped outcomes.
-        </p>
-      </section>
+      <div
+        className="grid gap-[clamp(28px,5vw,64px)]"
+        style={{
+          gridTemplateColumns:
+            'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
+        }}
+      >
+        <Reveal index={1} as="section" className="space-y-6.5">
+          <div>
+            <h2 className="font-mono text-xs uppercase tracking-[0.14em] text-brand-secondary mb-2.5">
+              Summary
+            </h2>
+            <p className="text-body text-[17px] leading-relaxed max-w-[40ch]">
+              Technical Product/Program Manager with{' '}
+              <strong className="text-heading font-medium">8 years</strong> in
+              software development, including{' '}
+              <strong className="text-heading font-medium">
+                5 years leading engineering teams
+              </strong>
+              . Combines hands-on technical fluency with program management
+              practice, including Agile/Scrum facilitation, stakeholder
+              communication, cross-team dependency coordination, and risk
+              management, to turn ambiguous requirements into shipped outcomes.
+            </p>
+          </div>
 
-      <section className="mb-8">
-        <h2 className="font-heading text-xl font-semibold text-brand-secondary mb-3 pb-2 border-b border-subtle">
-          Core Competencies
-        </h2>
-        <ul className="flex flex-wrap gap-2">
-          {competencies.map((item) => (
-            <li
-              key={item}
-              className="rounded-full border border-subtle bg-surface-alt px-3 py-1 text-sm text-body"
-            >
-              {item}
-            </li>
-          ))}
-        </ul>
-      </section>
+          <div>
+            <h2 className="font-mono text-xs uppercase tracking-[0.14em] text-brand-secondary mb-2.5">
+              Core Competencies
+            </h2>
+            <ul className="flex flex-wrap gap-2">
+              {competencies.map((item) => (
+                <li
+                  key={item}
+                  className="rounded-full border border-subtle px-3 py-1 font-mono text-xs text-body"
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
 
-      <section className="mb-8">
-        <h2 className="font-heading text-xl font-semibold text-brand-secondary mb-4 pb-2 border-b border-subtle">
-          Experience
-        </h2>
-        <div className="space-y-6">
-          {experience.map((job) => (
-            <div key={job.company + job.title}>
-              <div className="flex items-baseline justify-between flex-wrap gap-x-4">
-                <h3 className="font-medium text-heading">
-                  {job.title}, {job.company}
-                </h3>
-                <span className="text-sm text-body">{job.dates}</span>
+          <div>
+            <h2 className="font-mono text-xs uppercase tracking-[0.14em] text-brand-secondary mb-2.5">
+              Education
+            </h2>
+            <div className="space-y-2 mb-3">
+              {education.map((item) => (
+                <div key={item.school + item.degree}>
+                  <h3 className="text-heading text-[17px]">
+                    {item.degree}, {item.school}
+                  </h3>
+                  <span className="font-mono text-xs text-body">
+                    {item.dates}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <p className="text-body text-[17px]">
+              Certified ScrumMaster (CSM), 2022
+            </p>
+          </div>
+        </Reveal>
+
+        <Reveal index={2} as="section">
+          <h2 className="font-mono text-xs uppercase tracking-[0.14em] text-brand-secondary mb-4">
+            Experience
+          </h2>
+          <div className="space-y-6.5">
+            {experience.map((job) => (
+              <div
+                key={job.company + job.title}
+                className="grid gap-4.5"
+                style={{ gridTemplateColumns: '96px 1fr' }}
+              >
+                <span className="font-mono text-xs text-body pt-1.5">
+                  {job.dates}
+                </span>
+                <div>
+                  <h3 className="font-heading text-[21px] text-heading">
+                    {job.title}, {job.company}
+                  </h3>
+                  <p className="font-mono text-xs text-body mb-2">
+                    {job.location}
+                  </p>
+                  <ul className="list-disc list-outside pl-5 space-y-1 text-body text-[17px] leading-relaxed">
+                    {job.bullets.map((bullet) => (
+                      <li key={bullet}>{bullet}</li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-              <p className="text-sm text-body mb-2">{job.location}</p>
-              <ul className="list-disc list-outside pl-5 space-y-1 text-body">
-                {job.bullets.map((bullet) => (
-                  <li key={bullet}>{bullet}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section>
-        <h2 className="font-heading text-xl font-semibold text-brand-secondary mb-4 pb-2 border-b border-subtle">
-          Education
-        </h2>
-        <div className="space-y-3 mb-3">
-          {education.map((item) => (
-            <div
-              key={item.school + item.degree}
-              className="flex items-baseline justify-between flex-wrap gap-x-4"
-            >
-              <h3 className="font-medium text-heading">
-                {item.degree}, {item.school}
-              </h3>
-              <span className="text-sm text-body">{item.dates}</span>
-            </div>
-          ))}
-        </div>
-        <p className="text-body">Certified ScrumMaster (CSM), 2022</p>
-      </section>
+            ))}
+          </div>
+        </Reveal>
+      </div>
     </div>
   )
 }
