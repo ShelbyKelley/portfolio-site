@@ -33,14 +33,15 @@ function Home() {
       </Link>
 
       <section className="pt-10 border-t border-subtle">
-        <h2 className="font-heading text-2xl font-semibold text-heading mb-4">
+        <h2 className="font-heading text-2xl font-semibold text-brand-secondary mb-4">
           Leading under a hard deadline
         </h2>
         <div className="text-body leading-relaxed space-y-4 max-w-2xl">
           <p>
-            At HeroDevs, I led a three-person team through a three-month
-            deadline to finish a partial system migration for a client in
-            Denmark.
+            At HeroDevs, I led a{' '}
+            <strong className="text-heading">three-person team</strong> through
+            a <strong className="text-heading">three-month deadline</strong> to
+            finish a partial system migration for a client in Denmark.
           </p>
           <p>
             I set up a kanban board to divide the work and ran daily standups to
@@ -49,13 +50,13 @@ function Home() {
             same codebase.
           </p>
           <p>
-            I served as both team lead and a working developer, splitting work
-            across the team and running informal lunch-and-learns to close skill
-            gaps as they came up.
+            I served as both <strong className="text-heading">team lead</strong>{' '}
+            and a working developer, splitting work across the team and running
+            informal lunch-and-learns to close skill gaps as they came up.
           </p>
           <p>
-            We hit the deadline, and the client stayed on for further work with
-            HeroDevs.
+            We <strong className="text-heading">hit the deadline</strong>, and
+            the client stayed on for further work with HeroDevs.
           </p>
         </div>
       </section>

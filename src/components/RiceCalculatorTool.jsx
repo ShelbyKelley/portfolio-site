@@ -5,10 +5,18 @@ const STORAGE_KEY = 'rice-calculator-ideas'
 const emptyIdea = {
   name: '',
   reach: '',
-  impact: '',
+  impact: '2',
   confidence: '',
   effort: '',
 }
+
+const impactOptions = [
+  { value: '3', label: '3 (Massive)' },
+  { value: '2', label: '2 (High)' },
+  { value: '1', label: '1 (Medium)' },
+  { value: '0.5', label: '0.5 (Low)' },
+  { value: '0.25', label: '0.25 (Minimal)' },
+]
 
 function computeScore({ reach, impact, confidence, effort }) {
   const r = parseFloat(reach)
@@ -45,14 +53,17 @@ function RiceCalculatorTool() {
     (a, b) => (computeScore(b) ?? -1) - (computeScore(a) ?? -1)
   )
 
+  const selectClass =
+    'w-full rounded-md border border-subtle bg-surface-alt px-3 py-2 text-heading focus:outline-none focus:ring-2 focus:ring-brand'
+  const inputClass =
+    'w-full rounded-md border border-subtle bg-surface-alt px-3 py-2 text-heading placeholder:text-body focus:outline-none focus:ring-2 focus:ring-brand'
+  const labelClass = 'block text-sm font-medium text-heading mb-1'
+
   return (
-    <div className="mt-8">
+    <div>
       <form onSubmit={handleAdd} className="mb-8">
         <div className="mb-4">
-          <label
-            htmlFor="idea-name"
-            className="block text-sm font-medium text-heading mb-1"
-          >
+          <label htmlFor="idea-name" className={labelClass}>
             Idea name
           </label>
           <input
@@ -61,75 +72,64 @@ function RiceCalculatorTool() {
             placeholder="e.g. Dark mode toggle"
             value={draft.name}
             onChange={(e) => setDraft({ ...draft, name: e.target.value })}
-            className="w-full rounded-md border border-subtle bg-surface-alt px-3 py-2 text-heading placeholder:text-body focus:outline-none focus:ring-2 focus:ring-brand"
+            className={inputClass}
           />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
           <div>
-            <label
-              htmlFor="idea-reach"
-              className="block text-sm font-medium text-heading mb-1"
-            >
-              Reach
+            <label htmlFor="idea-reach" className={labelClass}>
+              Reach (users/quarter)
             </label>
             <input
               id="idea-reach"
               type="number"
-              placeholder="Users per quarter"
               value={draft.reach}
               onChange={(e) => setDraft({ ...draft, reach: e.target.value })}
-              className="w-full rounded-md border border-subtle bg-surface-alt px-3 py-2 text-heading placeholder:text-body focus:outline-none focus:ring-2 focus:ring-brand"
+              className={inputClass}
             />
           </div>
           <div>
-            <label
-              htmlFor="idea-impact"
-              className="block text-sm font-medium text-heading mb-1"
-            >
+            <label htmlFor="idea-impact" className={labelClass}>
               Impact
             </label>
-            <input
+            <select
               id="idea-impact"
-              type="number"
-              placeholder="1 to 3"
               value={draft.impact}
               onChange={(e) => setDraft({ ...draft, impact: e.target.value })}
-              className="w-full rounded-md border border-subtle bg-surface-alt px-3 py-2 text-heading placeholder:text-body focus:outline-none focus:ring-2 focus:ring-brand"
-            />
+              className={selectClass}
+            >
+              {impactOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
           </div>
           <div>
-            <label
-              htmlFor="idea-confidence"
-              className="block text-sm font-medium text-heading mb-1"
-            >
-              Confidence
+            <label htmlFor="idea-confidence" className={labelClass}>
+              Confidence (%)
             </label>
             <input
               id="idea-confidence"
               type="number"
-              placeholder="Percent"
               value={draft.confidence}
               onChange={(e) =>
                 setDraft({ ...draft, confidence: e.target.value })
               }
-              className="w-full rounded-md border border-subtle bg-surface-alt px-3 py-2 text-heading placeholder:text-body focus:outline-none focus:ring-2 focus:ring-brand"
+              className={inputClass}
             />
           </div>
           <div>
-            <label
-              htmlFor="idea-effort"
-              className="block text-sm font-medium text-heading mb-1"
-            >
-              Effort
+            <label htmlFor="idea-effort" className={labelClass}>
+              Effort (weeks)
             </label>
             <input
               id="idea-effort"
               type="number"
-              placeholder="Person-weeks"
               value={draft.effort}
               onChange={(e) => setDraft({ ...draft, effort: e.target.value })}
-              className="w-full rounded-md border border-subtle bg-surface-alt px-3 py-2 text-heading placeholder:text-body focus:outline-none focus:ring-2 focus:ring-brand"
+              className={inputClass}
             />
           </div>
         </div>
@@ -173,7 +173,7 @@ function RiceCalculatorTool() {
                     <td className="py-2 pr-4">{idea.impact}</td>
                     <td className="py-2 pr-4">{idea.confidence}%</td>
                     <td className="py-2 pr-4">{idea.effort}</td>
-                    <td className="py-2 pr-4 font-semibold text-brand">
+                    <td className="py-2 pr-4 font-bold text-brand">
                       {score !== null ? score.toFixed(1) : 'N/A'}
                     </td>
                     <td className="py-2">
