@@ -1,6 +1,8 @@
 # Shelby Kelley — Portfolio Site
 
-Personal portfolio site for full-stack projects with a backend focus, currently in progress.
+Personal portfolio site positioned around a career pivot from Software
+Engineer to Technical Product/Program Manager (TPM), backed by projects that
+show the underlying technical fluency.
 
 **Live site:** [shelbyannkelley.com](https://shelbyannkelley.com)
 
@@ -8,6 +10,7 @@ Personal portfolio site for full-stack projects with a backend focus, currently 
 
 - **React** (Vite) — component structure, client-side routing via React Router
 - **Tailwind CSS v4** — utility-first styling, theme-aware via CSS variables (fall palette in light mode, Halloween palette in dark mode), manual dark mode toggle persisted in `localStorage`
+- **Newsreader + IBM Plex Mono** (Google Fonts) — serif for display/body copy, mono for UI chrome (nav, labels, buttons, code-like blocks)
 - **Font Awesome** — footer social icons and site favicon
 - **ESLint** — general JS rules, React-specific rules (`@eslint-react/eslint-plugin`), accessibility rules (`eslint-plugin-jsx-a11y-x`), and enforced/auto-sorted import ordering (`eslint-plugin-import-x`)
 - **Prettier** — code formatting, integrated with ESLint via `eslint-config-prettier`
@@ -20,9 +23,9 @@ Personal portfolio site for full-stack projects with a backend focus, currently 
 
 ## Featured projects
 
-- **Package Health Checker** — Live and functional. Search any package for known CVEs, severity, and advisory links. Backend runs on AWS Lambda behind API Gateway, with rate limiting. Source at [github.com/ShelbyKelley/package-health-checker](https://github.com/ShelbyKelley/package-health-checker). The search UI component (`src/components/PackageHealthCheckerTool.jsx`) is **synced automatically** from that repo via a GitHub Actions workflow that opens a PR here whenever it changes — don't hand-edit that file directly, since it'll be overwritten by the next sync.
-- **Retro Rewind** — In progress. Reverse-engineering a game's API from the ground up: schema design, Docker, and a deliberate Python-to-Java port.
-- **Pantry-to-Plate** — In progress. Recipe matching against a tracked pantry, with a bounded LLM fallback for leftover ingredients.
+- **Package Health Checker** — Live and functional. Search any npm package for known CVEs, severity, and advisory links. Backend runs on AWS Lambda behind API Gateway, with rate limiting. Source at [github.com/ShelbyKelley/package-health-checker](https://github.com/ShelbyKelley/package-health-checker). The search UI component (`src/components/PackageHealthCheckerTool.jsx`) is **synced automatically** from that repo via a GitHub Actions workflow that opens a PR here whenever it changes — don't hand-edit that file directly, since it'll be overwritten by the next sync.
+- **RICE Prioritization Calculator** — Live and functional. A working RICE scoring tool for ranking competing feature ideas by reach, impact, confidence, and effort. Pure frontend, no backend, state kept in `localStorage`.
+- **Package Health Checker case study** — A written breakdown of the scoping decisions and trade-offs behind the tool above (why version-range computation was cut in favor of linking to source advisories, and the rate-limiting/input-validation posture once the API went public).
 
 ## Local development
 
