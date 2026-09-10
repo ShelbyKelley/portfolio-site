@@ -7,7 +7,7 @@ function BackToTop() {
     function handleScroll() {
       setVisible(window.scrollY > 300)
     }
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
@@ -25,6 +25,7 @@ function BackToTop() {
 
   return (
     <button
+      type="button"
       onClick={scrollToTop}
       aria-label="Back to top"
       className="fixed bottom-24 right-6 z-50 rounded-full border border-subtle bg-surface px-4 py-3 font-mono text-body no-underline hover:border-brand hover:text-brand transition-colors duration-200"

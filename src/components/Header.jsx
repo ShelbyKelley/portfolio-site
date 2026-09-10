@@ -1,4 +1,19 @@
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
+
+const navItems = [
+  { to: '/', label: 'home' },
+  { to: '/projects', label: 'projects' },
+  { to: '/resume', label: 'resume' },
+]
+
+// NavLink sets aria-current="page" on the active route for screen readers and
+// gives us the matching visual state for free.
+function navLinkClass({ isActive }) {
+  return [
+    'no-underline transition-colors hover:text-brand',
+    isActive ? 'text-brand' : 'text-body',
+  ].join(' ')
+}
 
 function Header({ darkMode, setDarkMode }) {
   return (
@@ -10,26 +25,17 @@ function Header({ darkMode, setDarkMode }) {
         <span className="text-body">Shelby Kelley</span>
         <span className="text-brand-secondary normal-case">/ technical pm</span>
       </Link>
-      <nav className="flex items-center gap-6 font-mono text-[13px]">
-        <Link
-          to="/"
-          className="text-body no-underline hover:text-brand transition-colors"
-        >
-          home
-        </Link>
-        <Link
-          to="/projects"
-          className="text-body no-underline hover:text-brand transition-colors"
-        >
-          projects
-        </Link>
-        <Link
-          to="/resume"
-          className="text-body no-underline hover:text-brand transition-colors"
-        >
-          resume
-        </Link>
+      <nav
+        aria-label="Main"
+        className="flex items-center gap-6 font-mono text-[13px]"
+      >
+        {navItems.map(({ to, label }) => (
+          <NavLink key={to} to={to} end={to === '/'} className={navLinkClass}>
+            {label}
+          </NavLink>
+        ))}
         <button
+          type="button"
           onClick={() => setDarkMode(!darkMode)}
           className="rounded-full border border-subtle px-3.5 py-1.5 min-h-8 tracking-[0.08em] text-body hover:border-brand hover:text-brand transition-colors duration-200"
         >
