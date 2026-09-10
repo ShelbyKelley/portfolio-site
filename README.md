@@ -8,6 +8,7 @@ show the underlying technical fluency.
 
 ## Tech stack
 
+- **Node** — version pinned in `.nvmrc` (used by `nvm use` locally and by CI via `node-version-file`)
 - **React** (Vite) — component structure, client-side routing via React Router
 - **Tailwind CSS v4** — utility-first styling, theme-aware via CSS variables (fall palette in light mode, Halloween palette in dark mode), manual dark mode toggle persisted in `localStorage`
 - **Newsreader + IBM Plex Mono** (Google Fonts) — serif for display/body copy, mono for UI chrome (nav, labels, buttons, code-like blocks)
@@ -30,6 +31,7 @@ show the underlying technical fluency.
 ## Local development
 
 ```bash
+nvm use        # Node version is pinned in .nvmrc
 npm install
 npm run dev
 ```
@@ -45,11 +47,13 @@ This points the embedded Package Health Checker tool at that project's local bac
 ## Linting & formatting
 
 ```bash
-npx eslint .               # check for lint issues
-npx eslint . --fix         # auto-fix what's fixable (mainly import order)
-npx prettier --check .     # check formatting
-npx prettier --write .     # auto-fix formatting
+npm run lint           # check for lint issues
+npm run lint:fix       # auto-fix what's fixable (mainly import order)
+npm run format:check   # check formatting
+npm run format         # auto-fix formatting
 ```
+
+Husky + lint-staged run the fixers on staged files before every commit, and commitlint rejects commit messages that aren't Conventional Commits. CI re-runs all of the above so a bypassed hook still gets caught.
 
 ## Environment setup
 
@@ -59,23 +63,31 @@ npx prettier --write .     # auto-fix formatting
 CLOUDFRONT_DISTRIBUTION_ID=your_distribution_id_here
 ```
 
-**GitHub Actions (automatic deploy):** the following must be set in the repo's Settings → Secrets and variables → Actions:
+**GitHub Actions:** the following must be set in the repo's Settings → Secrets and variables → Actions:
 
-| Name                          | Type     | Purpose                                                 |
-| ----------------------------- | -------- | ------------------------------------------------------- |
-| `AWS_ACCESS_KEY_ID`           | Secret   | Deploy IAM user's access key                            |
-| `AWS_SECRET_ACCESS_KEY`       | Secret   | Deploy IAM user's secret key                            |
-| `CLOUDFRONT_DISTRIBUTION_ID`  | Secret   | Cache invalidation after deploy                         |
-| `VITE_PACKAGE_HEALTH_API_URL` | Variable | Public Lambda API URL, built into the production bundle |
+| Name                          | Type     | Purpose                                                          |
+| ----------------------------- | -------- | ---------------------------------------------------------------- |
+| `DEPLOY_ROLE_ARN`             | Variable | IAM role the deploy job assumes via GitHub OIDC (no static keys) |
+| `CLOUDFRONT_DISTRIBUTION_ID`  | Secret   | Cache invalidation after deploy                                  |
+| `VITE_PACKAGE_HEALTH_API_URL` | Variable | Public Lambda API URL, built into the production bundle          |
 
-## Deployment
+`VITE_PACKAGE_HEALTH_API_URL` has to be passed explicitly in each workflow's build step via `env:`, since `.env.production` is gitignored and never reaches CI.
 
-**Primary: automatic via GitHub Actions.** Every push to `main` triggers `.github/workflows/deploy.yml`, which lints, builds, syncs to S3, and invalidates the CloudFront cache. Just push — no manual steps needed. A separate `.github/workflows/lint.yml` runs lint/format checks on pull requests.
+Deploys authenticate with short-lived credentials from GitHub's OIDC provider rather than a long-lived access key pair, so the AWS side needs an IAM OIDC identity provider for `token.actions.githubusercontent.com` and a role whose trust policy is scoped to this repo (and ideally to `ref:refs/heads/main`). The role needs `s3:ListBucket`/`s3:PutObject`/`s3:DeleteObject` on the `shelby-portfolio` bucket and `cloudfront:CreateInvalidation` on the distribution.
 
-**Fallback: manual deploy.** If CI is unavailable, or you want to deploy a local change without pushing, run:
+## CI and deployment
+
+Two workflows, split so that nothing deploys without first passing checks:
+
+- **`.github/workflows/ci.yml`** — runs on every pull request and every push to `main`. Lints, checks formatting, and builds.
+- **`.github/workflows/deploy.yml`** — triggered by a successful CI run on `main` (`workflow_run`), never by a push directly. Rebuilds at the exact commit CI verified, assumes the deploy role via OIDC, syncs to S3, and invalidates CloudFront.
+
+The S3 sync runs in two passes: hashed files under `assets/` get `max-age=31536000, immutable`, and everything else (`index.html`, `favicon.svg`, `resume.pdf`) gets `max-age=0, must-revalidate` so a deploy is picked up even before the invalidation lands.
+
+**Fallback: manual deploy.** If CI is unavailable, or you want to deploy a local change without pushing:
 
 ```bash
 ./deploy.sh
 ```
 
-This requires the local `.env` file mentioned above (for `CLOUDFRONT_DISTRIBUTION_ID`), since the script runs outside of GitHub's environment and doesn't have access to the repo's GitHub Secrets.
+This requires the local `.env` file mentioned above (for `CLOUDFRONT_DISTRIBUTION_ID`) and local AWS credentials, since the script runs outside GitHub's environment. It mirrors the same two-pass cache-control behavior as the workflow — keep the two in sync if either changes.
