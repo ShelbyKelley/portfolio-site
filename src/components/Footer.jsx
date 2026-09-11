@@ -1,14 +1,13 @@
-import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useMemo } from 'react'
+import { GithubIcon, LinkedinIcon } from './BrandIcons'
+
+// Module scope: new Date() during render is impure (@eslint-react/purity).
+const YEAR = new Date().getFullYear()
 
 function Footer() {
-  const year = useMemo(() => new Date().getFullYear(), [])
-
   return (
     <footer className="border-t border-subtle mt-4">
       <div className="max-w-4xl mx-auto px-6 py-6 flex items-center justify-between font-mono text-[13px] text-body">
-        <span>© {year} Shelby Kelley</span>
+        <span>© {YEAR} Shelby Kelley</span>
         <div className="flex gap-4">
           <a
             href="https://github.com/ShelbyKelley"
@@ -17,7 +16,7 @@ function Footer() {
             aria-label="GitHub"
             className="no-underline text-body hover:text-brand transition-colors"
           >
-            <FontAwesomeIcon icon={faGithub} size="lg" />
+            <GithubIcon />
           </a>
           <a
             href="https://www.linkedin.com/in/shelbyakelley/"
@@ -26,7 +25,7 @@ function Footer() {
             aria-label="LinkedIn"
             className="no-underline text-body hover:text-brand transition-colors"
           >
-            <FontAwesomeIcon icon={faLinkedin} size="lg" />
+            <LinkedinIcon />
           </a>
         </div>
       </div>
