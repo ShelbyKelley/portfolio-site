@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# The PDF carries contact details the HTML resume page omits on purpose.
+Disallow: /resume.pdf
+
+Sitemap: https://shelbyannkelley.com/sitemap.xml

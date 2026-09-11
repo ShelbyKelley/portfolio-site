@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Kept in sync with src/pageMeta.js by src/sitemap.test.js. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://shelbyannkelley.com/</loc></url>
+  <url><loc>https://shelbyannkelley.com/projects</loc></url>
+  <url><loc>https://shelbyannkelley.com/package-health-checker</loc></url>
+  <url><loc>https://shelbyannkelley.com/rice-calculator</loc></url>
+  <url><loc>https://shelbyannkelley.com/phc-case-study</loc></url>
+  <url><loc>https://shelbyannkelley.com/resume</loc></url>
+</urlset>
