@@ -12,9 +12,11 @@ show the underlying technical fluency.
 - **React** (Vite) — component structure, client-side routing via React Router
 - **Tailwind CSS v4** — utility-first styling, theme-aware via CSS variables (fall palette in light mode, Halloween palette in dark mode), manual dark mode toggle persisted in `localStorage`
 - **Newsreader + IBM Plex Mono** (Google Fonts) — serif for display/body copy, mono for UI chrome (nav, labels, buttons, code-like blocks)
-- **Font Awesome** — footer social icons and site favicon
+- **Inline SVG icons** — the two footer brand marks are inline paths (Font Awesome Free artwork, CC BY 4.0) rather than the `@fortawesome` runtime, which was about a quarter of the JS bundle (24 kB gzipped) for two icons
 - **ESLint** — general JS rules, React-specific rules (`@eslint-react/eslint-plugin`), accessibility rules (`eslint-plugin-jsx-a11y-x`), and enforced/auto-sorted import ordering (`eslint-plugin-import-x`)
 - **Prettier** — code formatting, integrated with ESLint via `eslint-config-prettier`
+- **Vitest + Testing Library + axe** — 160 tests covering routes, metadata, accessibility, colour contrast, and component behaviour, run in CI
+- **Dependabot** — weekly grouped npm and GitHub Actions updates
 - **Husky + lint-staged** — auto-lints and formats staged files before every commit
 - **commitlint** — enforces conventional commit messages
 - **AWS S3** — static file hosting
@@ -44,16 +46,31 @@ VITE_PACKAGE_HEALTH_API_URL=http://localhost:8000
 
 This points the embedded Package Health Checker tool at that project's local backend — see its own repo for running that.
 
-## Linting & formatting
+## Linting, formatting, and tests
 
 ```bash
 npm run lint           # check for lint issues
 npm run lint:fix       # auto-fix what's fixable (mainly import order)
 npm run format:check   # check formatting
 npm run format         # auto-fix formatting
+npm test               # run the test suite once
+npm run test:watch     # re-run on change
+npm run test:coverage  # run with a coverage report
 ```
 
 Husky + lint-staged run the fixers on staged files before every commit, and commitlint rejects commit messages that aren't Conventional Commits. CI re-runs all of the above so a bypassed hook still gets caught.
+
+The suite covers 100% of `src/`, with a 95% threshold enforced in `vite.config.js` so it cannot rot silently. Tests sit next to the file they cover. `src/App.test.jsx` renders every route in `src/routes.jsx` and asserts it produces exactly one `<h1>`, sets its own title and meta description, and doesn't fall through to the catch-all. That covers the most likely breakage on a site like this, which is a route wired up wrong. `src/routes.test.js` asserts `public/sitemap.xml` lists exactly those same routes, since the sitemap is hand-written and would otherwise drift.
+
+## SEO and crawlers
+
+`public/robots.txt` allows everything except `/resume.pdf` and points at `public/sitemap.xml`, which lists the six real routes. The sitemap matters more than the page count suggests: CloudFront rewrites 404s to `/index.html` with a 200, so _every_ URL on the domain answers "200 OK" and search engines would otherwise have to guess which ones are real.
+
+The PDF is disallowed because it carries contact details that are deliberately left off the HTML resume page. That page is fully indexable and covers the same content, so nothing is lost. Note this only stops well-behaved crawlers.
+
+Per-route `<title>`, description, canonical and `robots` tags are rendered declaratively by `src/components/PageMeta.jsx` using React 19's document metadata support, which hoists them into `<head>`. React _appends_ rather than replacing what `index.html` declares, so ownership is split deliberately: `index.html` keeps the `og:` and `twitter:` tags, since link unfurlers never run JavaScript and can only see static markup, while React owns the tags Googlebot re-reads after rendering. A test asserts exactly one description and one canonical per route so duplicates can't ship.
+
+**Known limitation:** because that metadata is client-side, a shared deep link still unfurls on LinkedIn or Slack with the site-wide `og:` text. Fixing it properly means pre-rendering each route to static HTML at build time.
 
 ## Environment setup
 
@@ -79,7 +96,7 @@ Deploys authenticate with short-lived credentials from GitHub's OIDC provider ra
 
 Two workflows, split so that nothing deploys without first passing checks:
 
-- **`.github/workflows/ci.yml`** — runs on every pull request and every push to `main`. Lints, checks formatting, and builds.
+- **`.github/workflows/ci.yml`** — runs on every pull request and every push to `main`. Lints, checks formatting, runs tests, and builds.
 - **`.github/workflows/deploy.yml`** — triggered by a successful CI run on `main` (`workflow_run`), never by a push directly. Rebuilds at the exact commit CI verified, assumes the deploy role via OIDC, syncs to S3, and invalidates CloudFront.
 
 The S3 sync runs in two passes: hashed files under `assets/` get `max-age=31536000, immutable`, and everything else (`index.html`, `favicon.svg`, `resume.pdf`) gets `max-age=0, must-revalidate` so a deploy is picked up even before the invalidation lands.
