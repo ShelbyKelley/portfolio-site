@@ -36,8 +36,8 @@ function Header({ darkMode, setDarkMode }) {
         ))}
         <button
           type="button"
-          onClick={() => setDarkMode(!darkMode)}
-          className="rounded-full border border-subtle px-3.5 py-1.5 min-h-8 tracking-[0.08em] text-body hover:border-brand hover:text-brand transition-colors duration-200"
+          onClick={() => setDarkMode((isDark) => !isDark)}
+          className="rounded-full border border-control-border px-3.5 py-1.5 min-h-8 tracking-[0.08em] text-body hover:border-brand hover:text-brand transition-colors duration-200"
         >
           {darkMode ? 'light mode' : 'dark mode'}
         </button>

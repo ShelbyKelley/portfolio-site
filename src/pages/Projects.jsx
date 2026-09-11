@@ -97,9 +97,9 @@ function Projects() {
             <p className="font-mono text-xs text-brand-secondary mb-2">
               {project.eyebrow}
             </p>
-            <h3 className="font-heading font-light text-[clamp(28px,3.6vw,40px)] leading-[1.1] tracking-[-0.015em] text-heading">
+            <h2 className="font-heading font-light text-[clamp(28px,3.6vw,40px)] leading-[1.1] tracking-[-0.015em] text-heading">
               {project.title}
-            </h3>
+            </h2>
           </div>
 
           <div>

@@ -11,7 +11,7 @@ function NotFound() {
       </p>
       <Link
         to="/"
-        className="inline-block rounded-full border border-subtle px-4 py-2 font-mono text-[13px] no-underline text-body hover:border-brand hover:text-brand transition-colors duration-200"
+        className="inline-block rounded-full border border-control-border px-4 py-2 font-mono text-[13px] no-underline text-body hover:border-brand hover:text-brand transition-colors duration-200"
       >
         ← back to home
       </Link>
