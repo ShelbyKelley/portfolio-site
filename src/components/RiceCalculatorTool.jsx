@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react'
 
+import { computeScore } from '../lib/rice'
+import { readStoredJson, writeStoredJson } from '../lib/storage'
+
 const STORAGE_KEY = 'rice-calculator-ideas'
 
 const emptyIdea = {
@@ -18,35 +21,35 @@ const impactOptions = [
   { value: '0.25', label: '0.25 (Minimal)' },
 ]
 
-function computeScore({ reach, impact, confidence, effort }) {
-  const r = parseFloat(reach)
-  const i = parseFloat(impact)
-  const c = parseFloat(confidence)
-  const e = parseFloat(effort)
-  if (!r || !i || !c || !e) return null
-  return (r * i * (c / 100)) / e
+// randomUUID, not Date.now(): two ideas added in the same millisecond would
+// share an id and duplicate React keys. It is missing outside secure contexts
+// (http on a LAN address, say), so fall back rather than throw.
+let idCounter = 0
+function newId() {
+  return crypto.randomUUID?.() ?? `idea-${Date.now()}-${idCounter++}`
 }
 
 function RiceCalculatorTool() {
   const [ideas, setIdeas] = useState(() => {
-    const saved = localStorage.getItem(STORAGE_KEY)
-    return saved ? JSON.parse(saved) : []
+    const saved = readStoredJson(STORAGE_KEY, [])
+    // Guard against a hand-edited entry.
+    return Array.isArray(saved) ? saved : []
   })
   const [draft, setDraft] = useState(emptyIdea)
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(ideas))
+    writeStoredJson(STORAGE_KEY, ideas)
   }, [ideas])
 
   function handleAdd(event) {
     event.preventDefault()
     if (!draft.name.trim()) return
-    setIdeas([...ideas, { ...draft, id: Date.now() }])
+    setIdeas((previous) => [...previous, { ...draft, id: newId() }])
     setDraft(emptyIdea)
   }
 
   function handleRemove(id) {
-    setIdeas(ideas.filter((idea) => idea.id !== id))
+    setIdeas((previous) => previous.filter((idea) => idea.id !== id))
   }
 
   const sortedIdeas = [...ideas].sort(
@@ -54,9 +57,9 @@ function RiceCalculatorTool() {
   )
 
   const selectClass =
-    'w-full rounded-md border border-subtle bg-surface-alt px-3 py-2 text-heading focus:outline-none focus:ring-2 focus:ring-brand'
+    'w-full rounded-md border border-control-border bg-surface-alt px-3 py-2 text-heading focus:outline-none focus:ring-2 focus:ring-brand'
   const inputClass =
-    'w-full rounded-md border border-subtle bg-surface-alt px-3 py-2 text-heading placeholder:text-body focus:outline-none focus:ring-2 focus:ring-brand'
+    'w-full rounded-md border border-control-border bg-surface-alt px-3 py-2 text-heading placeholder:text-body focus:outline-none focus:ring-2 focus:ring-brand'
   const labelClass = 'block text-sm font-medium text-heading mb-1'
 
   return (
@@ -84,6 +87,8 @@ function RiceCalculatorTool() {
             <input
               id="idea-reach"
               type="number"
+              min="0"
+              step="any"
               value={draft.reach}
               onChange={(e) => setDraft({ ...draft, reach: e.target.value })}
               className={inputClass}
@@ -113,6 +118,9 @@ function RiceCalculatorTool() {
             <input
               id="idea-confidence"
               type="number"
+              min="0"
+              max="100"
+              step="any"
               value={draft.confidence}
               onChange={(e) =>
                 setDraft({ ...draft, confidence: e.target.value })
@@ -127,6 +135,8 @@ function RiceCalculatorTool() {
             <input
               id="idea-effort"
               type="number"
+              min="0.5"
+              step="any"
               value={draft.effort}
               onChange={(e) => setDraft({ ...draft, effort: e.target.value })}
               className={inputClass}
@@ -151,13 +161,27 @@ function RiceCalculatorTool() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-subtle text-sm text-body">
-                <th className="py-2 pr-4">Idea</th>
-                <th className="py-2 pr-4">Reach</th>
-                <th className="py-2 pr-4">Impact</th>
-                <th className="py-2 pr-4">Confidence</th>
-                <th className="py-2 pr-4">Effort</th>
-                <th className="py-2 pr-4">Score</th>
-                <th className="py-2"></th>
+                <th scope="col" className="py-2 pr-4">
+                  Idea
+                </th>
+                <th scope="col" className="py-2 pr-4">
+                  Reach
+                </th>
+                <th scope="col" className="py-2 pr-4">
+                  Impact
+                </th>
+                <th scope="col" className="py-2 pr-4">
+                  Confidence
+                </th>
+                <th scope="col" className="py-2 pr-4">
+                  Effort
+                </th>
+                <th scope="col" className="py-2 pr-4">
+                  Score
+                </th>
+                <th scope="col" className="py-2">
+                  <span className="sr-only">Actions</span>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -178,6 +202,7 @@ function RiceCalculatorTool() {
                     </td>
                     <td className="py-2">
                       <button
+                        type="button"
                         onClick={() => handleRemove(idea.id)}
                         aria-label={`Remove ${idea.name}`}
                         className="text-sm text-body hover:text-brand transition-colors"
