@@ -2,89 +2,28 @@ import { useState, useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 
 import BackToTop from './components/BackToTop'
+import ErrorBoundary from './components/ErrorBoundary'
 import Footer from './components/Footer'
 import Header from './components/Header'
-import PageTitle from './components/PageTitle'
+import PageMeta from './components/PageMeta'
 import ScrollToTop from './components/ScrollToTop'
-import Home from './pages/Home'
-import NotFound from './pages/NotFound'
-import PackageHealthChecker from './pages/PackageHealthChecker'
-import PHCCaseStudy from './pages/PHCCaseStudy'
-import Projects from './pages/Projects'
-import Resume from './pages/Resume'
-import RiceCalculator from './pages/RiceCalculator'
-
-// Per-route <title> and meta description, kept next to the routes they
-// describe so the two cannot drift apart.
-const PAGE_META = {
-  '/': {
-    title: null,
-    description:
-      'Technical Product/Program Manager with 8 years in software development, including 5 years leading engineering teams.',
-  },
-  '/projects': {
-    title: 'Projects',
-    description:
-      'Selected product and program work, including the Package Health Checker and a RICE prioritization calculator.',
-  },
-  '/package-health-checker': {
-    title: 'Package Health Checker',
-    description:
-      'Search any npm package for known CVEs, severity, and advisory links.',
-  },
-  '/rice-calculator': {
-    title: 'RICE Calculator',
-    description:
-      'Score and rank competing feature ideas by reach, impact, confidence, and effort.',
-  },
-  '/phc-case-study': {
-    title: 'Package Health Checker Case Study',
-    description:
-      'The scoping decisions and trade-offs behind the Package Health Checker.',
-  },
-  '/resume': {
-    title: 'Resume',
-    description:
-      'Resume for Shelby Kelley, Technical Product/Program Manager, available on-page and as a PDF download.',
-  },
-}
-
-const NOT_FOUND_META = { title: 'Page not found', description: null }
-
-// localStorage is unavailable in some privacy modes and embedded webviews,
-// where touching it throws. The theme is a nicety, so fall back to light
-// rather than taking the whole app down with it.
-function readStoredTheme() {
-  try {
-    return localStorage.getItem('theme')
-  } catch {
-    return null
-  }
-}
-
-function storeTheme(value) {
-  try {
-    localStorage.setItem('theme', value)
-  } catch {
-    // Preference simply will not persist. Nothing else to do.
-  }
-}
+import { readStoredString, writeStoredString } from './lib/storage'
+import { routes } from './routes'
 
 function App() {
   const { pathname } = useLocation()
-  const [darkMode, setDarkMode] = useState(() => readStoredTheme() === 'dark')
+  const [darkMode, setDarkMode] = useState(
+    () => readStoredString('theme') === 'dark'
+  )
 
   useEffect(() => {
-    const root = document.documentElement
-    root.classList.toggle('dark', darkMode)
-    storeTheme(darkMode ? 'dark' : 'light')
+    document.documentElement.classList.toggle('dark', darkMode)
+    writeStoredString('theme', darkMode ? 'dark' : 'light')
   }, [darkMode])
-
-  const meta = PAGE_META[pathname] ?? NOT_FOUND_META
 
   return (
     <div className="min-h-screen flex flex-col bg-surface transition-[background-color,color] duration-420 ease-in-out">
-      <PageTitle title={meta.title} description={meta.description} />
+      <PageMeta />
       <ScrollToTop />
 
       <a
@@ -98,18 +37,14 @@ function App() {
         <Header darkMode={darkMode} setDarkMode={setDarkMode} />
 
         <main id="main-content">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route
-              path="/package-health-checker"
-              element={<PackageHealthChecker />}
-            />
-            <Route path="/rice-calculator" element={<RiceCalculator />} />
-            <Route path="/phc-case-study" element={<PHCCaseStudy />} />
-            <Route path="/resume" element={<Resume />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          {/* Keyed by pathname so navigating away clears a caught error. */}
+          <ErrorBoundary key={pathname}>
+            <Routes>
+              {routes.map(({ path, Component }) => (
+                <Route key={path} path={path} element={<Component />} />
+              ))}
+            </Routes>
+          </ErrorBoundary>
         </main>
       </div>
 

@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Applied before first paint so the correct theme renders without a flash. -->
+    <!-- Must stay above the stylesheets: a pending stylesheet blocks inline
+         scripts, which would delay this past first paint and flash the theme. -->
     <script>
       try {
         if (localStorage.getItem('theme') === 'dark') {
@@ -21,12 +22,9 @@
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>Shelby's Portfolio</title>
-    <meta
-      name="description"
-      content="Shelby Kelley — Technical Product/Program Manager with 8 years in software development, 5 leading engineering teams."
-    />
 
-    <!-- Open Graph (LinkedIn, Slack, Facebook, etc.) -->
+    <!-- Site-wide defaults for link unfurlers, which don't run JS. Per-route
+         tags come from src/components/PageMeta.jsx. -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Shelby Kelley — Portfolio" />
     <meta
