@@ -47,9 +47,8 @@ jobs:
           role-to-assume: ${{ vars.DEPLOY_ROLE_ARN }}
           aws-region: us-east-1
 
-      # Hashed asset filenames are safe to cache forever. Everything else
-      # (index.html, favicon, resume.pdf) must revalidate so a deploy is
-      # picked up even before the CloudFront invalidation lands.
+      # Hashed filenames cache forever. Everything else must revalidate so a
+      # deploy lands before the invalidation completes.
       - name: Upload immutable assets to S3
         run: |
           aws s3 sync dist/ s3://shelby-portfolio --delete \

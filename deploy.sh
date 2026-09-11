@@ -2,10 +2,9 @@
 # Manual deploy fallback. CI (.github/workflows/deploy.yml) is the primary path.
 set -euo pipefail
 
-# Run from the repo root regardless of where the script was invoked from.
 cd "$(dirname "$0")"
 
-# Load the distribution ID from .env (not committed to git)
+# .env holds CLOUDFRONT_DISTRIBUTION_ID and is not committed.
 if [ ! -f .env ]; then
   echo "Missing .env with CLOUDFRONT_DISTRIBUTION_ID. See README." >&2
   exit 1
@@ -17,7 +16,7 @@ source .env
 echo "Building React app..."
 npm run build
 
-# Keep these two passes in sync with .github/workflows/deploy.yml.
+# Keep in sync with .github/workflows/deploy.yml.
 echo "Uploading hashed assets to S3..."
 aws s3 sync dist/ s3://shelby-portfolio --delete \
   --exclude "*" --include "assets/*" \
