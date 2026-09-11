@@ -1,23 +1,18 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
-// React Router keeps the previous scroll offset across client-side
-// navigations, so a link clicked halfway down a page lands halfway down the
-// next one. Reset on every pathname change, honoring reduced-motion.
+import { scrollBehavior } from '../lib/motion'
+
+// React Router keeps the previous scroll offset across navigations.
+// RR7's <ScrollRestoration> needs a data router, which this app doesn't use.
 function ScrollToTop() {
   const { pathname, hash } = useLocation()
 
   useEffect(() => {
+    // A hash means the browser is jumping to an anchor, leave it alone.
     if (hash) return
 
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches
-
-    window.scrollTo({
-      top: 0,
-      behavior: prefersReducedMotion ? 'auto' : 'smooth',
-    })
+    window.scrollTo({ top: 0, behavior: scrollBehavior() })
   }, [pathname, hash])
 
   return null

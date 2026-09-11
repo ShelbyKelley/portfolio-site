@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
+import { prefersReducedMotion } from '../lib/motion'
+
 function Reveal({
   as: Tag = 'div',
   index = 0,
@@ -9,11 +11,15 @@ function Reveal({
   ...props
 }) {
   const ref = useRef(null)
-  const [visible, setVisible] = useState(false)
+  // Reduced motion means no reveal at all, so start shown rather than fading
+  // content in as it scrolls past.
+  const [visible, setVisible] = useState(() => prefersReducedMotion())
 
   useEffect(() => {
     const node = ref.current
-    if (!node) return
+    // Checked again rather than read from state, so the effect stays free of
+    // reactive dependencies and the observer is built at most once.
+    if (!node || prefersReducedMotion()) return
 
     const observer = new IntersectionObserver(
       ([entry]) => {

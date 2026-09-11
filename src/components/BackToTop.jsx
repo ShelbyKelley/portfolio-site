@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 
+import { scrollBehavior } from '../lib/motion'
+
 function BackToTop() {
   const [visible, setVisible] = useState(() => window.scrollY > 300)
 
@@ -12,13 +14,7 @@ function BackToTop() {
   }, [])
 
   function scrollToTop() {
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches
-    window.scrollTo({
-      top: 0,
-      behavior: prefersReducedMotion ? 'auto' : 'smooth',
-    })
+    window.scrollTo({ top: 0, behavior: scrollBehavior() })
   }
 
   if (!visible) return null
@@ -28,7 +24,7 @@ function BackToTop() {
       type="button"
       onClick={scrollToTop}
       aria-label="Back to top"
-      className="fixed bottom-24 right-6 z-50 rounded-full border border-subtle bg-surface px-4 py-3 font-mono text-body no-underline hover:border-brand hover:text-brand transition-colors duration-200"
+      className="fixed bottom-24 right-6 z-50 rounded-full border border-control-border bg-surface px-4 py-3 font-mono text-body no-underline hover:border-brand hover:text-brand transition-colors duration-200"
     >
       ↑
     </button>
