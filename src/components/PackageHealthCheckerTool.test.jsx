@@ -32,9 +32,10 @@ const vulnerable = {
   ],
 }
 
-function mockFetch(response, ok = true) {
+function mockFetch(response, ok = true, status = ok ? 200 : 404) {
   const fetchMock = vi.fn().mockResolvedValue({
     ok,
+    status,
     json: async () => response,
   })
   vi.stubGlobal('fetch', fetchMock)
@@ -64,7 +65,7 @@ describe('PackageHealthCheckerTool', () => {
 
     expect(await screen.findByText('lodash')).toBeInTheDocument()
     expect(
-      screen.getByText(/no known vulnerabilities found/i)
+      screen.getByText(/has no known vulnerabilities/i)
     ).toBeInTheDocument()
   })
 
@@ -75,7 +76,7 @@ describe('PackageHealthCheckerTool', () => {
     await search('minimist')
 
     expect(await screen.findByText(/GHSA-xxxx/)).toBeInTheDocument()
-    expect(screen.getByText(/vulnerabilities \(1\)/i)).toBeInTheDocument()
+    expect(screen.getByText(/vulnerability history \(1\)/i)).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /advisory/i })).toHaveAttribute(
       'href',
       'https://example.com/advisory'
@@ -97,7 +98,9 @@ describe('PackageHealthCheckerTool', () => {
 
     await search('lodash')
 
-    expect(await screen.findByText(/offline/i)).toBeInTheDocument()
+    expect(
+      await screen.findByText(/could not reach the api/i)
+    ).toBeInTheDocument()
   })
 
   it('does not call the API for an empty search', async () => {
@@ -119,5 +122,24 @@ describe('PackageHealthCheckerTool', () => {
     expect(fetchMock).toHaveBeenCalledWith(
       expect.stringContaining(encodeURIComponent('@scope/pkg'))
     )
+  })
+
+  it('reports a configuration error when the API URL is missing at build time', async () => {
+    // API_BASE_URL is read into a module-level const at import time, so the
+    // shared default in vite.config.js's test.env is already too late to
+    // override here — clear it and re-import fresh instead of vi.stubEnv().
+    vi.stubEnv('VITE_PACKAGE_HEALTH_API_URL', '')
+    vi.resetModules()
+    const { default: FreshPackageHealthCheckerTool } =
+      await import('./PackageHealthCheckerTool')
+    render(<FreshPackageHealthCheckerTool />)
+
+    expect(screen.getByRole('alert')).toHaveTextContent(/not configured/i)
+    expect(
+      screen.queryByPlaceholderText(/enter a package name/i)
+    ).not.toBeInTheDocument()
+
+    vi.unstubAllEnvs()
+    vi.resetModules()
   })
 })
