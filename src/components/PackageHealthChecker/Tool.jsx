@@ -4,9 +4,9 @@ import {
   CONFIGURATION_ERROR_MESSAGE,
   getErrorMessage,
   NETWORK_ERROR_MESSAGE,
-} from './PackageHealthCheckerConstants'
-import PackageHealthCheckerStatusBanner from './PackageHealthCheckerStatusBanner'
-import PackageHealthCheckerVulnerabilityHistory from './PackageHealthCheckerVulnerabilityHistory'
+} from './Constants'
+import StatusBanner from './StatusBanner'
+import VulnerabilityHistory from './VulnerabilityHistory'
 
 // Vite inlines env vars at build time, so a missing value here means the
 // build itself was misconfigured. Any trailing slash is stripped so the
@@ -18,7 +18,7 @@ const API_BASE_URL = import.meta.env.VITE_PACKAGE_HEALTH_API_URL?.replace(
 
 const NO_SEARCH_YET = { result: null, error: null }
 
-function PackageHealthCheckerTool() {
+function Tool() {
   const [packageName, setPackageName] = useState('')
 
   // A form Action gets the pending flag for free and removes the
@@ -120,7 +120,7 @@ function PackageHealthCheckerTool() {
             </time>
           </div>
 
-          <PackageHealthCheckerStatusBanner
+          <StatusBanner
             latestVersion={result.latest_version}
             vulnerable={result.latest_version_vulnerable}
           />
@@ -128,7 +128,7 @@ function PackageHealthCheckerTool() {
           {result.vulnerability_count > 0 && (
             // Keyed by package, so every filter and the page number reset
             // themselves on a new search instead of being cleared by hand.
-            <PackageHealthCheckerVulnerabilityHistory
+            <VulnerabilityHistory
               key={result.name}
               vulnerabilities={result.vulnerabilities}
               totalCount={result.vulnerability_count}
@@ -140,4 +140,4 @@ function PackageHealthCheckerTool() {
   )
 }
 
-export default PackageHealthCheckerTool
+export default Tool

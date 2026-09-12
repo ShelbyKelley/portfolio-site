@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import PackageHealthCheckerTool from './PackageHealthCheckerTool'
+import Tool from './Tool'
 
 // The component itself is synced from the package-health-checker repo and must
 // not be hand-edited. These tests live here on purpose: they pin the behaviour
@@ -59,7 +59,7 @@ afterEach(() => {
 describe('PackageHealthCheckerTool', () => {
   it('reports a clean package', async () => {
     mockFetch(clean)
-    render(<PackageHealthCheckerTool />)
+    render(<Tool />)
 
     await search('lodash')
 
@@ -71,7 +71,7 @@ describe('PackageHealthCheckerTool', () => {
 
   it('lists vulnerabilities with their advisory link', async () => {
     mockFetch(vulnerable)
-    render(<PackageHealthCheckerTool />)
+    render(<Tool />)
 
     await search('minimist')
 
@@ -85,7 +85,7 @@ describe('PackageHealthCheckerTool', () => {
 
   it('shows an error when the package is not found', async () => {
     mockFetch({}, false)
-    render(<PackageHealthCheckerTool />)
+    render(<Tool />)
 
     await search('does-not-exist')
 
@@ -94,7 +94,7 @@ describe('PackageHealthCheckerTool', () => {
 
   it('shows an error when the request fails outright', async () => {
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('offline')))
-    render(<PackageHealthCheckerTool />)
+    render(<Tool />)
 
     await search('lodash')
 
@@ -106,7 +106,7 @@ describe('PackageHealthCheckerTool', () => {
   it('does not call the API for an empty search', async () => {
     const fetchMock = mockFetch(clean)
     const user = userEvent.setup()
-    render(<PackageHealthCheckerTool />)
+    render(<Tool />)
 
     await user.click(screen.getByRole('button', { name: /search/i }))
 
@@ -115,7 +115,7 @@ describe('PackageHealthCheckerTool', () => {
 
   it('url-encodes scoped package names', async () => {
     const fetchMock = mockFetch(clean)
-    render(<PackageHealthCheckerTool />)
+    render(<Tool />)
 
     await search('@scope/pkg')
 
@@ -130,9 +130,8 @@ describe('PackageHealthCheckerTool', () => {
     // override here — clear it and re-import fresh instead of vi.stubEnv().
     vi.stubEnv('VITE_PACKAGE_HEALTH_API_URL', '')
     vi.resetModules()
-    const { default: FreshPackageHealthCheckerTool } =
-      await import('./PackageHealthCheckerTool')
-    render(<FreshPackageHealthCheckerTool />)
+    const { default: FreshTool } = await import('./Tool')
+    render(<FreshTool />)
 
     expect(screen.getByRole('alert')).toHaveTextContent(/not configured/i)
     expect(

@@ -1,4 +1,4 @@
-import PackageHealthCheckerTool from '../components/PackageHealthCheckerTool'
+import PackageHealthCheckerTool from '../components/PackageHealthChecker/Tool'
 import ToolPageHeader from '../components/ToolPageHeader'
 
 function PackageHealthChecker() {
