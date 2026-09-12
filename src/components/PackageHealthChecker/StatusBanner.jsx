@@ -1,4 +1,4 @@
-function PackageHealthCheckerStatusBanner({ latestVersion, vulnerable }) {
+function StatusBanner({ latestVersion, vulnerable }) {
   return (
     // role=status announces the verdict when it replaces the previous
     // result, which is the one thing a screen reader user is waiting for.
@@ -21,4 +21,4 @@ function PackageHealthCheckerStatusBanner({ latestVersion, vulnerable }) {
   )
 }
 
-export default PackageHealthCheckerStatusBanner
+export default StatusBanner

@@ -1,6 +1,6 @@
-import { SORT_OPTIONS } from './PackageHealthCheckerConstants'
+import { SORT_OPTIONS } from './Constants'
 
-function PackageHealthCheckerFilters({
+function Filters({
   sortBy,
   onSortByChange,
   severityFilter,
@@ -55,4 +55,4 @@ function PackageHealthCheckerFilters({
   )
 }
 
-export default PackageHealthCheckerFilters
+export default Filters
