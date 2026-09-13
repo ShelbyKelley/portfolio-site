@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { act } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 
-import Reveal from './Reveal'
+import Reveal from '../Reveal'
 
 // Not a hook. Captures the real observer callback so a test can drive intersection,
 // rather than the do-nothing stub in src/test-utils/setup.js.

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { computeScore } from './rice'
+import { computeScore } from '../rice'
 
 const valid = { reach: '100', impact: '2', confidence: '80', effort: '2' }
 

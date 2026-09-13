@@ -4,10 +4,10 @@ import { fileURLToPath } from 'node:url'
 
 import { describe, expect, it } from 'vitest'
 
-import { contrastRatio } from './test-utils/color'
+import { contrastRatio } from '../test-utils/color'
 
 const css = readFileSync(
-  join(dirname(fileURLToPath(import.meta.url)), 'index.css'),
+  join(dirname(fileURLToPath(import.meta.url)), '..', 'index.css'),
   'utf8'
 )
 

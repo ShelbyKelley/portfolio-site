@@ -2,9 +2,9 @@ import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
 
-import App from './App'
-import { SITE_ORIGIN } from './lib/site'
-import { pages, catchAll } from './routes'
+import App from '../App'
+import { SITE_ORIGIN } from '../lib/site'
+import { pages, catchAll } from '../routes'
 
 function renderAt(path) {
   return render(

@@ -4,8 +4,8 @@ import { describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
 import * as matchers from 'vitest-axe/matchers'
 
-import App from './App'
-import { pages } from './routes'
+import App from '../App'
+import { pages } from '../routes'
 
 expect.extend(matchers)
 

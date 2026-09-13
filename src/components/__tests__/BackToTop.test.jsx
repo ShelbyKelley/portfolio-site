@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
-import BackToTop from './BackToTop'
+import BackToTop from '../BackToTop'
 
 function scrollTo(y) {
   window.scrollY = y

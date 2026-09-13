@@ -4,10 +4,15 @@ import { fileURLToPath } from 'node:url'
 
 import { describe, expect, it } from 'vitest'
 
-import { SITE_ORIGIN } from './lib/site'
-import { pages } from './routes'
+import { SITE_ORIGIN } from '../lib/site'
+import { pages } from '../routes'
 
-const publicDir = join(dirname(fileURLToPath(import.meta.url)), '..', 'public')
+const publicDir = join(
+  dirname(fileURLToPath(import.meta.url)),
+  '..',
+  '..',
+  'public'
+)
 const sitemap = readFileSync(join(publicDir, 'sitemap.xml'), 'utf8')
 const robots = readFileSync(join(publicDir, 'robots.txt'), 'utf8')
 

@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Link, Route, Routes } from 'react-router-dom'
 import { describe, expect, it, vi } from 'vitest'
 
-import ScrollToTop from './ScrollToTop'
+import ScrollToTop from '../ScrollToTop'
 
 function Harness({ initialEntries }) {
   return (

@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
-import RiceCalculatorTool from './RiceCalculatorTool'
+import RiceCalculatorTool from '../RiceCalculatorTool'
 
 const STORAGE_KEY = 'rice-calculator-ideas'
 

@@ -2,11 +2,11 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import Tool from './Tool'
+import Tool from '../Tool'
 
 // The component itself is synced from the package-health-checker repo and must
-// not be hand-edited. These tests live here on purpose: they pin the behaviour
-// this site depends on, so a bad sync fails CI instead of reaching production.
+// not be hand-edited. These tests pin the behaviour this site depends on, so a
+// bad sync fails CI instead of reaching production.
 
 const clean = {
   name: 'lodash',
@@ -130,7 +130,7 @@ describe('PackageHealthCheckerTool', () => {
     // override here — clear it and re-import fresh instead of vi.stubEnv().
     vi.stubEnv('VITE_PACKAGE_HEALTH_API_URL', '')
     vi.resetModules()
-    const { default: FreshTool } = await import('./Tool')
+    const { default: FreshTool } = await import('../Tool')
     render(<FreshTool />)
 
     expect(screen.getByRole('alert')).toHaveTextContent(/not configured/i)

@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it, vi } from 'vitest'
 
-import ErrorBoundary from './ErrorBoundary'
+import ErrorBoundary from '../ErrorBoundary'
 
 function Boom() {
   throw new Error('boom')

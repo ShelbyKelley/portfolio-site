@@ -60,7 +60,7 @@ npm run test:coverage  # run with a coverage report
 
 Husky + lint-staged run the fixers on staged files before every commit, and commitlint rejects commit messages that aren't Conventional Commits. CI re-runs all of the above so a bypassed hook still gets caught.
 
-The suite covers 100% of `src/`, with a 95% threshold enforced in `vite.config.js` so it cannot rot silently. Tests sit next to the file they cover. `src/App.test.jsx` renders every route in `src/routes.jsx` and asserts it produces exactly one `<h1>`, sets its own title and meta description, and doesn't fall through to the catch-all. That covers the most likely breakage on a site like this, which is a route wired up wrong. `src/routes.test.js` asserts `public/sitemap.xml` lists exactly those same routes, since the sitemap is hand-written and would otherwise drift.
+The suite covers 100% of `src/`, with a 95% threshold enforced in `vite.config.js` so it cannot rot silently. Tests live in a `__tests__/` folder adjacent to the code they cover (one per directory that has tests, not a single global folder). `src/__tests__/App.test.jsx` renders every route in `src/routes.jsx` and asserts it produces exactly one `<h1>`, sets its own title and meta description, and doesn't fall through to the catch-all. That covers the most likely breakage on a site like this, which is a route wired up wrong. `src/__tests__/routes.test.js` asserts `public/sitemap.xml` lists exactly those same routes, since the sitemap is hand-written and would otherwise drift.
 
 ## SEO and crawlers
 

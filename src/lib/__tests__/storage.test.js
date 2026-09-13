@@ -5,7 +5,7 @@ import {
   readStoredString,
   writeStoredJson,
   writeStoredString,
-} from './storage'
+} from '../storage'
 
 function breakStorage(method) {
   const original = Storage.prototype[method]
