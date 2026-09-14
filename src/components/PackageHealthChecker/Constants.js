@@ -1,14 +1,13 @@
-export const PAGE_SIZE = 5
+export const SEVERITIES = ['critical', 'high', 'moderate', 'low']
 
-export const SEVERITY_STYLES = {
-  CRITICAL:
-    'text-severity-critical border-severity-critical bg-severity-critical/10',
-  HIGH: 'text-severity-high border-severity-high bg-severity-high/10',
-  MODERATE:
-    'text-severity-moderate border-severity-moderate bg-severity-moderate/10',
-  LOW: 'text-severity-low border-severity-low bg-severity-low/10',
-}
-export const DEFAULT_SEVERITY_STYLE = 'text-body border-subtle'
+export const SEVERITY_FILTERS = ['all', ...SEVERITIES]
+
+export const PAGE_SIZE_OPTIONS = [5, 10, 25]
+export const DEFAULT_PAGE_SIZE = PAGE_SIZE_OPTIONS[0]
+
+// A lockfile audit can produce hundreds of findings rows, so the report table
+// pages at a fixed size rather than offering a selector.
+export const REPORT_PAGE_SIZE = 10
 
 const SEVERITY_RANK = { CRITICAL: 4, HIGH: 3, MODERATE: 2, LOW: 1 }
 
@@ -16,11 +15,34 @@ export function getSeverityRank(severity) {
   return SEVERITY_RANK[severity?.toUpperCase()] ?? 0
 }
 
-export const SORT_OPTIONS = [
-  { value: 'default', label: 'Default order' },
-  { value: 'severity-desc', label: 'Severity: high to low' },
-  { value: 'severity-asc', label: 'Severity: low to high' },
-  { value: 'affects-latest', label: 'Affects latest first' },
+// Text, border, AND a 10% background tint — the severity tokens in
+// index.css are calibrated specifically for this combination (12px text on
+// a 10% tint of its own color must clear 4.5:1 WCAG AA), so this is the
+// exact case those values were tuned against. Don't drop the tint.
+export const SEVERITY_CLASSES = {
+  CRITICAL:
+    'text-severity-critical border-severity-critical bg-severity-critical/10',
+  HIGH: 'text-severity-high border-severity-high bg-severity-high/10',
+  MODERATE:
+    'text-severity-moderate border-severity-moderate bg-severity-moderate/10',
+  LOW: 'text-severity-low border-severity-low bg-severity-low/10',
+}
+export const DEFAULT_SEVERITY_CLASS = 'text-body border-subtle'
+
+export function severityClass(severity) {
+  return SEVERITY_CLASSES[severity?.toUpperCase()] ?? DEFAULT_SEVERITY_CLASS
+}
+
+// Picked for a spread of health grades on real data, not just cleanliness —
+// request and angular (legacy AngularJS) are both deprecated with unfixed
+// advisories, so the tool has something to actually say on the first click.
+export const SUGGESTED_PACKAGES = [
+  'lodash',
+  'express',
+  'colors',
+  'node-sass',
+  'request',
+  'angular',
 ]
 
 // Every failure used to surface as "Package not found", which hid the two

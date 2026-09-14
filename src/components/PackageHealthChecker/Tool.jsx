@@ -1,53 +1,24 @@
-import { useActionState, useState } from 'react'
+import { useState } from 'react'
 
-import {
-  CONFIGURATION_ERROR_MESSAGE,
-  getErrorMessage,
-  NETWORK_ERROR_MESSAGE,
-} from './Constants'
-import StatusBanner from './StatusBanner'
-import VulnerabilityHistory from './VulnerabilityHistory'
+import AuditTab from './AuditTab'
+import { CONFIGURATION_ERROR_MESSAGE } from './Constants'
+import SearchTab from './SearchTab'
 
 // Vite inlines env vars at build time, so a missing value here means the
-// build itself was misconfigured. Any trailing slash is stripped so the
+// build itself was misconfigured. Any trailing slash is stripped so a
 // request path can never come out as "//package/...".
 const API_BASE_URL = import.meta.env.VITE_PACKAGE_HEALTH_API_URL?.replace(
   /\/+$/,
   ''
 )
 
-const NO_SEARCH_YET = { result: null, error: null }
+const TAB_CLASSES = {
+  active: 'text-heading border-b-2 border-brand',
+  inactive: 'text-body border-b-2 border-transparent',
+}
 
 function Tool() {
-  const [packageName, setPackageName] = useState('')
-
-  // A form Action gets the pending flag for free and removes the
-  // preventDefault / setLoading / try-finally bookkeeping a manual submit
-  // handler needs. Errors are returned as state, not thrown, so a failed
-  // lookup never leaves the UI stuck mid-request.
-  const [search, submitSearch, isSearching] = useActionState(
-    async (previousSearch) => {
-      const name = packageName.trim()
-      if (!name) return previousSearch
-
-      try {
-        const response = await fetch(
-          `${API_BASE_URL}/package/${encodeURIComponent(name)}`
-        )
-
-        if (!response.ok) {
-          return { result: null, error: getErrorMessage(response.status) }
-        }
-
-        return { result: await response.json(), error: null }
-      } catch {
-        // fetch rejects only on a transport-level failure; HTTP statuses are
-        // handled above.
-        return { result: null, error: NETWORK_ERROR_MESSAGE }
-      }
-    },
-    NO_SEARCH_YET
-  )
+  const [tab, setTab] = useState('search')
 
   // Hooks have to run unconditionally, so this guard sits below them rather
   // than at the top. Without it, a build missing the env var would quietly
@@ -56,86 +27,39 @@ function Tool() {
     return (
       <p
         role="alert"
-        className="mt-8 rounded-md border border-status-danger bg-surface-alt p-4 text-status-danger"
+        className="rounded-md border border-status-danger bg-surface-alt p-4 text-status-danger"
       >
         {CONFIGURATION_ERROR_MESSAGE}
       </p>
     )
   }
 
-  const { result, error } = search
-
   return (
-    <div className="mt-8">
-      <form action={submitSearch} className="flex gap-2 mb-6">
-        <label htmlFor="package-name" className="sr-only">
-          npm package name
-        </label>
-        <input
-          id="package-name"
-          name="packageName"
-          type="text"
-          value={packageName}
-          onChange={(event) => setPackageName(event.target.value)}
-          placeholder="Enter a package name (e.g. lodash)"
-          required
-          spellCheck={false}
-          autoCapitalize="off"
-          autoCorrect="off"
-          className="flex-1 rounded-md border border-body bg-surface-alt px-4 py-2 text-heading placeholder:text-body focus:outline-none focus:ring-2 focus:ring-brand"
-        />
+    <div id="tool">
+      <div className="flex gap-1.5 border-b border-subtle">
         <button
-          type="submit"
-          disabled={isSearching}
-          className="rounded-md bg-brand px-5 py-2 text-brand-contrast font-medium hover:opacity-90 disabled:opacity-50 transition-opacity"
+          type="button"
+          onClick={() => setTab('search')}
+          className={`font-mono text-[13px] tracking-wide bg-transparent px-1 pt-2.5 pb-3 mr-4.5 cursor-pointer min-h-10 ${tab === 'search' ? TAB_CLASSES.active : TAB_CLASSES.inactive}`}
         >
-          {isSearching ? 'Searching...' : 'Search'}
+          Search a package
         </button>
-      </form>
-
-      <p className="text-xs text-body mb-6 -mt-4">
-        Package names are case-sensitive — please verify the exact package name
-        before searching.
-      </p>
-
-      {error && (
-        <div
-          role="alert"
-          className="rounded-md bg-surface-alt border border-brand p-4 text-brand"
+        <button
+          type="button"
+          onClick={() => setTab('audit')}
+          className={`font-mono text-[13px] tracking-wide bg-transparent px-1 pt-2.5 pb-3 mr-4.5 cursor-pointer min-h-10 ${tab === 'audit' ? TAB_CLASSES.active : TAB_CLASSES.inactive}`}
         >
-          {error}
-        </div>
-      )}
+          Audit a lockfile
+        </button>
+      </div>
 
-      {result && (
-        <div className="rounded-md border border-subtle bg-surface-alt p-6">
-          <h2 className="font-heading text-xl font-semibold text-heading">
-            {result.name}
-          </h2>
-          <p className="text-body mb-4">{result.description}</p>
-          <div className="text-sm text-body mb-4">
-            Latest version: {result.latest_version} · Last published:{' '}
-            <time dateTime={result.last_publish_date}>
-              {new Date(result.last_publish_date).toLocaleDateString()}
-            </time>
-          </div>
-
-          <StatusBanner
-            latestVersion={result.latest_version}
-            vulnerable={result.latest_version_vulnerable}
-          />
-
-          {result.vulnerability_count > 0 && (
-            // Keyed by package, so every filter and the page number reset
-            // themselves on a new search instead of being cleared by hand.
-            <VulnerabilityHistory
-              key={result.name}
-              vulnerabilities={result.vulnerabilities}
-              totalCount={result.vulnerability_count}
-            />
-          )}
-        </div>
-      )}
+      <div className="pt-[clamp(28px,5vh,44px)]">
+        {tab === 'search' ? (
+          <SearchTab apiBaseUrl={API_BASE_URL} />
+        ) : (
+          <AuditTab apiBaseUrl={API_BASE_URL} />
+        )}
+      </div>
     </div>
   )
 }
