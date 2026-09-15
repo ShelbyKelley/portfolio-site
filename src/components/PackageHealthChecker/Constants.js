@@ -42,7 +42,7 @@ export const SUGGESTED_PACKAGES = [
   'colors',
   'node-sass',
   'request',
-  'angular',
+  'angularjs',
 ]
 
 // Every failure used to surface as "Package not found", which hid the two
