@@ -44,8 +44,8 @@ function mockFetch(response, ok = true, status = ok ? 200 : 404) {
 
 async function search(term) {
   const user = userEvent.setup()
-  await user.type(screen.getByPlaceholderText(/enter a package name/i), term)
-  await user.click(screen.getByRole('button', { name: /search/i }))
+  await user.type(screen.getByPlaceholderText(/package name/i), term)
+  await user.click(screen.getByRole('button', { name: /^check$/i }))
 }
 
 beforeEach(() => {
@@ -63,10 +63,8 @@ describe('PackageHealthCheckerTool', () => {
 
     await search('lodash')
 
-    expect(await screen.findByText('lodash')).toBeInTheDocument()
-    expect(
-      screen.getByText(/has no known vulnerabilities/i)
-    ).toBeInTheDocument()
+    expect(await screen.findByRole('status')).toHaveTextContent('lodash')
+    expect(screen.queryByText(/advisories \(/i)).not.toBeInTheDocument()
   })
 
   it('lists vulnerabilities with their advisory link', async () => {
@@ -76,11 +74,10 @@ describe('PackageHealthCheckerTool', () => {
     await search('minimist')
 
     expect(await screen.findByText(/GHSA-xxxx/)).toBeInTheDocument()
-    expect(screen.getByText(/vulnerability history \(1\)/i)).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /advisory/i })).toHaveAttribute(
-      'href',
-      'https://example.com/advisory'
-    )
+    expect(screen.getByText(/advisories \(1\)/i)).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: /view advisory/i })
+    ).toHaveAttribute('href', 'https://example.com/advisory')
   })
 
   it('shows an error when the package is not found', async () => {
@@ -108,7 +105,7 @@ describe('PackageHealthCheckerTool', () => {
     const user = userEvent.setup()
     render(<Tool />)
 
-    await user.click(screen.getByRole('button', { name: /search/i }))
+    await user.click(screen.getByRole('button', { name: /^check$/i }))
 
     expect(fetchMock).not.toHaveBeenCalled()
   })
@@ -135,7 +132,7 @@ describe('PackageHealthCheckerTool', () => {
 
     expect(screen.getByRole('alert')).toHaveTextContent(/not configured/i)
     expect(
-      screen.queryByPlaceholderText(/enter a package name/i)
+      screen.queryByPlaceholderText(/package name/i)
     ).not.toBeInTheDocument()
 
     vi.unstubAllEnvs()
